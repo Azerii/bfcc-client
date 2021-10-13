@@ -1,0 +1,269 @@
+/* @font-face {
+  font-family: "Eudoxus Sans Medium";
+  src: url("./fonts/EudoxusSans-Medium.woff2") format("woff2"),
+    url("./fonts/EudoxusSans-Medium.woff") format("woff"),
+    url("./fonts/EudoxusSans-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+} */
+
+:root {
+  --primary_lighter: #9f9fff;
+  --primary_light: #7379ec;
+  --primary_main: #003399;
+  --primary_dark: #001977;
+  --primary_darker: #000e67;
+  --accent_1_lighter: #ffea9f;
+  --accent_1_light: #ffe37f;
+  --accent_1_main: #ffd53f;
+  --accent_1_dark: #aa8e2a;
+  --accent_1_darker: #806a1f;
+  --accent_2_lighter: #ffc784;
+  --accent_2_light: #feb45a;
+  --accent_2_main: #fe8f08;
+  --accent_2_dark: #a95f05;
+  --accent_2_darker: #7f4804;
+  --accent_3_lighter: #80ebed;
+  --accent_3_light: #56e5e8;
+  --accent_3_main: #01d8dc;
+  --accent_3_dark: #019093;
+  --accent_3_darker: #016c6e;
+  --grey_1: #fbfbfb;
+  --grey_2: #efefef;
+  --grey_3: #cccccc;
+  --grey_4: #aaaaaa;
+  --grey_5: #404040;
+  --black_1: #666666;
+  --black_2: #404040;
+  --black_3: #1a1a1a;
+  --black_4: #161616;
+  --black_5: #111111;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 10px;
+}
+
+body {
+  color: var(--text);
+  margin: 0;
+  font-family: var(--font_regular), -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+input:focus {
+  outline: none;
+  border-color: #1677bd;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+button:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+select {
+  appearance: none;
+}
+
+textarea {
+  resize: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+h1 {
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 64px;
+  letter-spacing: 0em;
+}
+
+h2 {
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: 0em;
+}
+
+h3 {
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 40px;
+  letter-spacing: 0em;
+}
+
+h4 {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0em;
+}
+
+p,
+.p1 {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0em;
+}
+
+.t1 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+}
+
+::selection {
+  background: var(--primary_main); /* WebKit/Blink Browsers */
+  color: #ffffff;
+}
+::-moz-selection {
+  background: var(--primary_main); /* Gecko Browsers */
+  color: #ffffff;
+}
+
+.backdrop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  pointer-events: none;
+  overflow: auto;
+  z-index: 5;
+}
+
+.backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.noDisplay {
+  display: none;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.alignEnd {
+  align-items: flex-end;
+}
+
+.alignStart {
+  align-items: flex-start;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.justifyEnd {
+  justify-content: flex-end;
+}
+
+.justifyStart {
+  justify-content: flex-start;
+}
+
+.justifySpaceBetween {
+  justify-content: space-between;
+}
+
+.justifySpaceAround {
+  justify-content: space-around;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.textLeft {
+  text-align: left;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.textUnderline {
+  text-decoration: underline;
+}
+
+.textUpperCase {
+  text-transform: uppercase;
+}
+
+.textCapitalize {
+  text-transform: capitalize;
+}
+
+.textBold {
+  font-weight: 700;
+}
