@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Layout = styled.div`
+const RegisterLayout = styled.div`
   position: relative;
   min-height: 100vh;
   width: 100vw;
@@ -62,4 +62,4 @@ const Layout = styled.div`
   }
 `;
 
-export default Layout;
+export default RegisterLayout;

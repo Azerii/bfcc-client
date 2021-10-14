@@ -7,7 +7,7 @@ import pig_light from "assets/pig_light.svg";
 import deer_light from "assets/deer_light.svg";
 import fox_reading from "assets/fox_reading.svg";
 import sheep_teaching from "assets/sheep_teaching.svg";
-import Layout from "components/Layout";
+import Layout from "components/RegisterLayout";
 import Logo from "components/Logo";
 import Spacer from "components/Spacer";
 import { useState } from "react";
@@ -57,6 +57,11 @@ const Content = styled.div`
 
       &.selected {
         border: 5px solid #9f9fff;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        pointer-events: none;
       }
 
       .image {
@@ -306,6 +311,7 @@ const Register = () => {
                   testTime === "later" ? " selected" : ""
                 }`}
                 onClick={() => setTestTime("later")}
+                disabled
               >
                 <img src={sheep_teaching} alt="Cartoon Fox" className="image" />
                 <Spacer y={0.6} />
@@ -325,7 +331,7 @@ const Register = () => {
               width="28rem"
               className="textBold"
               disabled={!testTime}
-              // onClick={() => router.push("/register")}
+              onClick={() => router.push("/test")}
             />
             <Spacer y={2.4} />
             <button
