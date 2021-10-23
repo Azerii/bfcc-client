@@ -14,6 +14,8 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import Spacer from "./Spacer";
 import Button from "./Button";
+import localStorage from "redux-persist/es/storage";
+import ConfirmModal from "./ConfirmModal";
 
 const Wrapper = styled.div`
   position: relative;
@@ -61,6 +63,8 @@ const Wrapper = styled.div`
 
 const Info = styled.div`
   position: absolute;
+  z-index: 0;
+  pointer-events: none;
 
   &.level {
     position: fixed;
@@ -122,6 +126,7 @@ const NavButton = styled.button`
   background-color: #ffffff;
   height: 9.6rem;
   width: 9.6rem;
+  z-index: 2;
 
   &:disabled {
     opacity: 0.6;
@@ -202,13 +207,6 @@ const AudioGroup = styled.div`
   }
 `;
 
-const range = (start, stop, step) =>
-  Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
-
-const tempOptions = ["option 1", "option 2", "option 3", "option 4"];
-
-const tempClasses = range(1, 10, 1);
-
 const tempSubjects = ["English Language", "Mathematics", "Science"];
 
 const tempQuestions = [
@@ -231,40 +229,40 @@ const tempQuestions = [
         "To the bicycle shop",
         "To the road",
       ],
-      answer: 3,
+      answer: 1,
       comprehension:
         "Kim stopped on her way to school. In the middle of the traffic lay two children. Their bicycles had crashed into each other. Kim ran quickly to help. She saw that no one was hurt. The children pointed to a television camera. ‘We are taking part in a road safety lesson,’ they said.",
       media_path: "",
-      classId: 2,
+      classId: 1,
       subjectId: 1,
     },
     {
       question: "Why did Ali go into the temple? ",
       options: ["To pray", "To sight-see", "To shelter", "To play"],
-      answer: 4,
+      answer: 3,
       comprehension:
         "As Ali sheltered in an old temple, his shoulder knocked a secret spring. Instantly, he was thrown into an underground room. In the darkness, the walls seemed to be covered with jewels. Ali rested a while. He knew that desert travellers often imagined strange things.Later, he explored the place for a way to escape. To his amazement, the jewels were still there. He had found a palace that had been buried long ago.",
       media_path: "",
-      classId: 3,
+      classId: 1,
       subjectId: 1,
     },
     {
       question: "What equipment assisted Jan in her exploration under water?",
       options: ["Head band", "Socks", "Diving belt", "Timer"],
-      answer: 4,
+      answer: 3,
       comprehension:
         "Jan buckled on her diving belt of metal weights and dropped from the launch. Skipper Kells supervised her air-hose to prevent tangling. Leo, following the bubbles, guided the dinghy above the diver, as she searched the mysterious underwater world. Jan surfaced frequently clutching crayfish. The required number of specimens was almost obtained when the grey nurse shark advanced directly towards her. Jan retreated cautiously without signalling for assistance. The creature brushed by, ignoring her, as baby sharks emerged from some rocky grooves. Their welfare was more important to the shark than the diver’s now motionless figure. ",
       media_path: "",
-      classId: 4,
+      classId: 1,
       subjectId: 1,
     },
     {
       question: "Who is the chief enemy of the fox?",
       options: ["Cat", "Tiger", "Dog", "Man"],
-      answer: 3,
+      answer: 4,
       comprehension:
         "Among animals, the fox has no rival for cunning. Suspicious of man, who is its only natural enemy, it will, when pursued, perform extraordinary feats, even alighting on the backs of sheep to divert its scent. Parent foxes share the responsibilities of cub-rearing. Through their hunting expeditions, they acquire an uncanny knowledge of their surroundings which they use in an emergency. This is well illustrated by the story of a hunted fox which led its pursuers to a neglected mine-shaft enclosed by a circular hedge. It appeared to surmount the barrier. The hounds followed headlong, only to fall into the accumulated water below. The fox, however, apparently on familiar territory, had skirted the hedge and subsequently escaped",
-      classId: 5,
+      classId: 1,
       subjectId: 1,
     },
     {
@@ -299,9 +297,15 @@ function isImageType(s) {
 const QuestionLayout = () => {
   const router = useHistory();
   const [questions, setQuestions] = useState(tempQuestions);
-  const [selectedOption, setSelectedOption] = useState("");
   const [currentSection, setCurrentSection] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [allSelected, setAllSelected] = useState(new Map());
+  const [selectedOption, setSelectedOption] = useState("");
+  const [confirmPrompt, setConfirmPrompt] = useState("Ready to submit?");
+  const [confirmDescription, setConfirmDescription] = useState(
+    "Are you sure you want to submit this test? If you select submit, you will not be able to edit your answers."
+  );
+  const [confirmActionText, setConfirmActionText] = useState("Submit");
 
   const nextQuestion = () => {
     if (questions[currentSection][questionIndex + 1]) {
@@ -319,20 +323,126 @@ const QuestionLayout = () => {
     }
   };
 
-  const nextSection = () => {
-    setQuestionIndex(0);
-    setCurrentSection(currentSection + 1);
-  };
-
   const playAudio = () => {
     const audio = document.querySelector(".audioFile");
 
     audio.play();
   };
 
-  const selectOption = (question, option, optionKey) => {};
+  const selectOption = async (question, option, optionKey) => {
+    const point = option === question.options[optionKey - 1] ? 1 : 0;
+    const section = `level ${question.classId} ${
+      tempSubjects[question.subjectId - 1]
+    }`;
 
-  const handleSubmit = () => {};
+    let points = {};
+    let sectionKeys = [];
+    let sectionKeyNames = await localStorage.getItem("sectionKeys");
+    let sectionName = await localStorage.getItem(section);
+
+    if (sectionKeyNames) {
+      sectionKeys = [...JSON.parse(sectionKeyNames)];
+    }
+
+    if (sectionName) {
+      points = { ...JSON.parse(sectionName) };
+    } else {
+      sectionKeys.push(section);
+
+      localStorage.setItem("sectionKeys", JSON.stringify(sectionKeys));
+    }
+
+    points[questionIndex + 1] = point;
+    localStorage.setItem(section, JSON.stringify(points));
+
+    setAllSelected(
+      allSelected.set(`${currentSection}${questionIndex}`, `${option}`)
+    );
+    setSelectedOption(option);
+  };
+
+  const gradeSection = async () => {
+    const tempKeys = await localStorage.getItem("sectionKeys");
+    let graded = false;
+    let score = 0;
+
+    if (!tempKeys) {
+      alert("You have not attempted any question");
+      return;
+    }
+
+    try {
+      const sectionKeys = JSON.parse(await localStorage.getItem("sectionKeys"));
+      const sectionName = sectionKeys[currentSection];
+      const sectionPoints = JSON.parse(await localStorage.getItem(sectionName));
+      const numberOfQuestions = questions[currentSection].length;
+
+      if (allSelected.size < numberOfQuestions) {
+        throw new Error("You must attempt all questions");
+      }
+
+      let acc = 0;
+
+      Object.keys(sectionPoints).forEach((key) => {
+        acc += sectionPoints[key];
+      });
+
+      score = parseInt((acc / numberOfQuestions) * 100);
+
+      let tempScores = {};
+
+      if (localStorage.getItem("scores")) {
+        tempScores = { ...JSON.parse(await localStorage.getItem("scores")) };
+      }
+
+      tempScores[sectionName] = score;
+      localStorage.setItem("scores", JSON.stringify(tempScores));
+
+      setAllSelected(new Map());
+      graded = true;
+    } catch (e) {
+      alert(e.message);
+    }
+
+    return { graded, score };
+  };
+
+  const nextSection = async () => {
+    const result = await gradeSection();
+
+    if (result?.graded) {
+      setQuestionIndex(0);
+      setCurrentSection(currentSection + 1);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const result = await gradeSection();
+
+    if (result?.graded) {
+      let acc = 0,
+        ovr;
+
+      const scores = JSON.parse(await localStorage.getItem("scores"));
+      const numberOfSections = Object.keys(scores).length;
+
+      Object.keys(scores).forEach((key) => {
+        acc += parseInt(scores[key]);
+      });
+
+      ovr = parseInt(acc / numberOfSections);
+
+      localStorage.setItem("ovr", ovr);
+
+      window.location.replace("/test/result");
+    } else {
+      alert("An error occurred");
+    }
+  };
+
+  const showConfirmModal = () => {
+    document.querySelector("#confirmModal").classList.add("show");
+  };
 
   return (
     <Wrapper>
@@ -356,7 +466,7 @@ const QuestionLayout = () => {
       <Info className="hint">
         <img src={bear} alt="Cartoon bear" className="image" />
         <div className="text">
-          <span>Use the passage to answer the following question</span>
+          <span>solve the following question</span>
         </div>
       </Info>
 
@@ -382,12 +492,21 @@ const QuestionLayout = () => {
         <img src={right_arrow} alt="Right Arrow" className="icon" />
       </NavButton>
 
+      <ConfirmModal
+        prompt={confirmPrompt}
+        description={confirmDescription}
+        actionText={confirmActionText}
+        handleSubmit={handleSubmit}
+      />
+
       {!questions[currentSection][questionIndex + 1] && (
         <Button
           type="button"
           text={questions[currentSection + 1] ? "Next section" : "Submit"}
           className="nextSection"
-          onClick={questions[currentSection + 1] ? nextSection : handleSubmit}
+          onClick={
+            questions[currentSection + 1] ? nextSection : showConfirmModal
+          }
         />
       )}
 
@@ -420,7 +539,7 @@ const QuestionLayout = () => {
           <Spacer y={2.4} />
         )}
         {isAudioType(questions[currentSection][questionIndex]?.media_path) && (
-          <div className="flexRow alignCenter">
+          <AudioGroup className="flexRow alignCenter">
             <audio src={audio_sample} className="audioFile"></audio>
             <img src={pig_alone} alt="Cartoon pig" className="pig" />
             <Spacer x={2.4} />
@@ -429,7 +548,7 @@ const QuestionLayout = () => {
             </button>
             <Spacer x={0.6} />
             <img src={sound_wave} alt="Sound wave" className="wave" />
-          </div>
+          </AudioGroup>
         )}
         {isImageType(questions[currentSection][questionIndex]?.media_path) && (
           <img
@@ -444,7 +563,7 @@ const QuestionLayout = () => {
         {questions[currentSection]?.map((question, index) => (
           <Options
             className={`${
-              question == questions[currentSection][questionIndex]
+              question === questions[currentSection][questionIndex]
                 ? "show"
                 : "hide"
             }`}
@@ -454,9 +573,12 @@ const QuestionLayout = () => {
               <button
                 key={index}
                 className={`item t1 bold textUpperCase textLeft${
-                  selectedOption === option ? " selected" : ""
+                  allSelected.get(`${currentSection}${questionIndex}`) ===
+                    option || selectedOption === option
+                    ? " selected"
+                    : ""
                 }`}
-                onClick={selectOption}
+                onClick={() => selectOption(question, option, question.answer)}
               >
                 <span>{option}</span>
                 <img src={bunny} alt="bunny" className="bunny" />

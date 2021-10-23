@@ -9,6 +9,7 @@ import curly_yellow from "assets/curly_yellow.svg";
 import curly_cyan from "assets/curly_cyan.svg";
 import Button from "components/Button";
 import QuestionLayout from "components/QuestionLayout";
+import Result from "./Result";
 
 const Instructions = styled(RegisterLayout)``;
 
@@ -64,6 +65,9 @@ const Test = () => {
 
       {/* Questions */}
       <Route path="/test/session" component={QuestionLayout} />
+
+      {/* Result */}
+      <Route exact path="/test/result" component={Result} />
     </>
   );
 };
