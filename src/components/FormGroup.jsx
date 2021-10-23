@@ -1,17 +1,31 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useField } from "formik";
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: center;
-  width: 100%;
-  height: ${(props) =>
-    props.fieldStyle === "longText" ? "fit-content" : "5.6rem"};
-  padding: ${(props) =>
-    props.fieldStyle === "longText" ? "1.8rem 2.4rem" : "0 2.4rem"};
-  border-bottom: 1px solid #4f4f4f;
+  .fieldWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: ${(props) =>
+      props.fieldStyle === "longText" ? "fit-content" : "5.6rem"};
+    padding: ${(props) =>
+      props.fieldStyle === "longText" ? "1.8rem 2.4rem" : "0 2.4rem"};
+    border-bottom: 1px solid #4f4f4f;
+
+    &.error {
+      border-color: var(--accent_2_dark);
+    }
+  }
+
+  .errorText {
+    display: block;
+    color: var(--accent_2_main);
+    font-size: 14px;
+    margin-top: 0.6rem;
+  }
 
   input,
   textarea {
@@ -37,14 +51,8 @@ const Wrapper = styled.div`
   }
 `;
 
-const FormGroup = ({
-  fieldStyle,
-  type,
-  name,
-  placeholder,
-  required,
-  onChange,
-}) => {
+const FormGroup = ({ fieldStyle, type, name, placeholder, required }) => {
+  const [field, meta] = useField(name);
   const [showLabel, setShowLabel] = useState(false);
 
   const toggleLabel = (e) => {
@@ -53,53 +61,46 @@ const FormGroup = ({
     } else {
       setShowLabel(false);
     }
-    onChange(e);
   };
 
   return (
     <Wrapper fieldStyle={fieldStyle}>
-      {fieldStyle === "shortText" && (
-        <>
+      <div
+        className={`fieldWrapper${meta.touched && meta.error ? " error" : ""}`}
+      >
+        {showLabel && <label htmlFor={name}>{placeholder}</label>}
+        {fieldStyle === "shortText" && (
           <input
+            {...field}
             className="textSmall"
             type={type || "text"}
             id={name}
             name={name}
             placeholder={placeholder}
-            onBlur={toggleLabel}
-            onChange={toggleLabel}
             required={required || false}
+            onBlur={(e) => {
+              toggleLabel(e);
+              field.onBlur(e);
+            }}
+            onChange={(e) => {
+              toggleLabel(e);
+              field.onChange(e);
+            }}
           />
-          {showLabel && <label htmlFor={name}>{placeholder}</label>}
-        </>
-      )}
-      {fieldStyle === "longText" && (
-        <>
+        )}
+        {fieldStyle === "longText" && (
           <textarea
             className="textSmall"
             id={name}
             name={name}
             placeholder={placeholder}
             required={required || false}
+            {...field}
           />
-          {showLabel && <label htmlFor={name}>{placeholder}</label>}
-        </>
-      )}
-
-      {!(fieldStyle === "shortText") && !(fieldStyle === "longText") && (
-        <>
-          <input
-            className="textSmall"
-            type={type || "text"}
-            id={name}
-            name={name}
-            placeholder={placeholder}
-            onBlur={toggleLabel}
-            onChange={toggleLabel}
-            required={required || false}
-          />
-          {showLabel && <label htmlFor={name}>{placeholder}</label>}
-        </>
+        )}
+      </div>
+      {meta.touched && meta.error && (
+        <span className="errorText">{meta.error}</span>
       )}
     </Wrapper>
   );

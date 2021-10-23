@@ -14,6 +14,8 @@ import { useState } from "react";
 import Button from "components/Button";
 import { Route, useHistory } from "react-router-dom";
 import FormGroup from "components/FormGroup";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 const Content = styled.div`
   position: relative;
@@ -70,12 +72,6 @@ const Content = styled.div`
     }
   }
 
-  .details {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 4.8rem;
-  }
-
   .cancelBtn {
     color: #ffffff;
 
@@ -85,29 +81,41 @@ const Content = styled.div`
   }
 `;
 
-const ageGroups = [
-  "Year 1",
-  "Year 2",
-  "Year 3",
-  "Year 4",
-  "Year 5",
-  "Year 6",
-  "Year 7",
-  "Year 8",
-  "Year 9",
-  "Year 10",
-];
+const FormWrapper = styled.form`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 4.8rem;
+
+  .spanFull {
+    grid-column: 1/3;
+  }
+`;
+
+const ageGroups = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Register = () => {
   const router = useHistory();
   const [ageGroup, setAgeGroup] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [testTime, setTestTime] = useState("");
 
-  const handleSubmit = () => {};
+  const selectAgeGroup = () => {
+    localStorage.setItem("ageGroup", ageGroup);
+    router.push("/register/details");
+  };
+
+  const setDetails = (details) => {
+    localStorage.setItem("details", JSON.stringify(details));
+    router.push("/register/test-time");
+  };
+
+  const schema = Yup.object({
+    first_name: Yup.string().required("Field required"),
+    last_name: Yup.string().required("Field required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Field required"),
+    phone: Yup.string().required("Field required"),
+  });
 
   return (
     <>
@@ -154,7 +162,7 @@ const Register = () => {
               {ageGroups.map((level) => (
                 <Button
                   key={level}
-                  text={level}
+                  text={`Year ${level}`}
                   bg="#ffffff"
                   color="var(--black_3)"
                   className={`t1 textBold item${
@@ -170,10 +178,15 @@ const Register = () => {
               width="28rem"
               className="textBold"
               disabled={!ageGroup}
-              onClick={() => router.push("/register/details")}
+              onClick={() => selectAgeGroup()}
             />
             <Spacer y={2.4} />
-            <button className="p1 textBold cancelBtn">Cancel</button>
+            <button
+              className="p1 textBold cancelBtn"
+              onClick={() => router.push("/")}
+            >
+              Cancel
+            </button>
             <Spacer y={4.8} />
           </Content>
         </Layout>
@@ -213,50 +226,64 @@ const Register = () => {
               report on your child’s test.
             </p>
             <Spacer y={4.8} />
-            <form onSubmit={handleSubmit} className="details">
-              <FormGroup
-                fieldStyle="shortText"
-                name="first_name"
-                placeholder={`Child's first name`}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              <FormGroup
-                fieldStyle="shortText"
-                name="last_name"
-                placeholder={`Child's last name`}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-              <FormGroup
-                fieldStyle="shortText"
-                type="email"
-                name="email"
-                placeholder={`Parent's email`}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <FormGroup
-                fieldStyle="shortText"
-                name="phone"
-                placeholder={`Parent's phone number`}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </form>
-            <Spacer y={4.8} />
-            <Button
-              type="submit"
-              text="Next"
-              width="28rem"
-              className="textBold"
-              disabled={!firstName || !lastName || !email || !phone}
-              onClick={() => router.push("/register/test-time")}
-            />
-            <Spacer y={2.4} />
-            <button
-              type="button"
-              className="p1 textBold cancelBtn light"
-              onClick={() => router.push("/")}
+
+            <Formik
+              initialValues={{
+                first_name: "",
+                last_name: "",
+                email: "",
+                phone: "",
+              }}
+              validationSchema={schema}
+              onSubmit={(values) => {
+                setDetails(values);
+              }}
             >
-              Cancel
-            </button>
+              {({ handleSubmit, isValid }) => (
+                <FormWrapper onSubmit={handleSubmit}>
+                  <FormGroup
+                    fieldStyle="shortText"
+                    name="first_name"
+                    placeholder={`Child's first name`}
+                  />
+                  <FormGroup
+                    fieldStyle="shortText"
+                    name="last_name"
+                    placeholder={`Child's last name`}
+                  />
+                  <FormGroup
+                    fieldStyle="shortText"
+                    type="email"
+                    name="email"
+                    placeholder={`Parent's email`}
+                  />
+                  <FormGroup
+                    fieldStyle="shortText"
+                    name="phone"
+                    placeholder={`Parent's phone number`}
+                  />
+                  <div className="spanFull flexColumn alignCenter">
+                    <Spacer y={4.8} />
+                    <Button
+                      type="submit"
+                      text="Next"
+                      width="28rem"
+                      className="textBold"
+                      disabled={!isValid}
+                    />
+                    <Spacer y={2.4} />
+                    <button
+                      type="button"
+                      className="p1 textBold cancelBtn light"
+                      onClick={() => router.push("/")}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </FormWrapper>
+              )}
+            </Formik>
+
             <Spacer y={4.8} />
           </Content>
         </Layout>
