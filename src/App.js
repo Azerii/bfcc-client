@@ -1,6 +1,5 @@
 import Register from "pages/Register";
 import Test from "pages/Test";
-import PageNotFound from "pages/PageNotFound";
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -19,7 +18,7 @@ function App() {
           <Route path="/test" component={Test} />
 
           {/* No match */}
-          <Route component={PageNotFound} />
+          <Route component={() => <Redirect to="/" />} />
         </Switch>
       </div>
     </Router>

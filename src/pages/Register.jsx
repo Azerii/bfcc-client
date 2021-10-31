@@ -239,7 +239,7 @@ const Register = () => {
                 setDetails(values);
               }}
             >
-              {({ handleSubmit, isValid }) => (
+              {({ handleSubmit, values, isValid }) => (
                 <FormWrapper onSubmit={handleSubmit}>
                   <FormGroup
                     fieldStyle="shortText"
@@ -269,7 +269,13 @@ const Register = () => {
                       text="Next"
                       width="28rem"
                       className="textBold"
-                      disabled={!isValid}
+                      disabled={
+                        !isValid ||
+                        !values.first_name ||
+                        !values.last_name ||
+                        !values.phone ||
+                        !values.email
+                      }
                     />
                     <Spacer y={2.4} />
                     <button

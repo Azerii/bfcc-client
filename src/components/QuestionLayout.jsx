@@ -16,6 +16,7 @@ import Spacer from "./Spacer";
 import Button from "./Button";
 import localStorage from "redux-persist/es/storage";
 import ConfirmModal from "./ConfirmModal";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   position: relative;
