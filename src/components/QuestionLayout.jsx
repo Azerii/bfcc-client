@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import homeIcon from "assets/home.svg";
 import elephant from "assets/elephant.svg";
 import bear from "assets/bear.svg";
@@ -16,199 +15,15 @@ import Spacer from "./Spacer";
 import Button from "./Button";
 import localStorage from "redux-persist/es/storage";
 import ConfirmModal from "./ConfirmModal";
-import { useEffect } from "react";
-import axios from "axios";
 import Loader from "./Loader";
-
-const Wrapper = styled.div`
-  position: relative;
-  min-height: 100vh;
-  width: 100vw;
-  background-color: var(--accent_2_light);
-  overflow: hidden;
-
-  .home {
-    position: fixed;
-    top: 4.8rem;
-    left: 9.6rem;
-    background-color: #ffffff;
-    height: 5.6rem;
-    width: 5.6rem;
-    border-radius: 50%;
-
-    &::after {
-      content: "";
-      position: absolute;
-      z-index: 1;
-      height: 4.8rem;
-      width: 4.8rem;
-      border-radius: 50%;
-      background-color: var(--grey_1);
-    }
-
-    .icon {
-      position: relative;
-      z-index: 2;
-      height: 3rem;
-    }
-  }
-
-  .nextSection {
-    position: fixed;
-    right: 9.6rem;
-    bottom: 4.8rem;
-  }
-
-  .questionImage {
-    height: 14.4rem;
-  }
-`;
-
-const Info = styled.div`
-  position: absolute;
-  z-index: 0;
-  pointer-events: none;
-
-  &.level {
-    position: fixed;
-    height: 39rem;
-    width: 27.5rem;
-    top: 4.8rem;
-    right: 0;
-
-    .image {
-      top: 0;
-      right: 0;
-    }
-
-    .text {
-      top: 4rem;
-      left: 1.6rem;
-      max-width: 14.4rem;
-    }
-  }
-
-  &.hint {
-    height: 36rem;
-    width: 44rem;
-    bottom: 0;
-    left: 0;
-
-    .image {
-      bottom: 0;
-      left: 0;
-    }
-
-    .text {
-      top: 4rem;
-      right: 2.8rem;
-      max-width: 18rem;
-    }
-  }
-
-  .image {
-    position: absolute;
-    z-index: 1;
-  }
-
-  .text {
-    position: absolute;
-    z-index: 2;
-    color: #ffffff;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 32px;
-    text-align: center;
-  }
-`;
-
-const NavButton = styled.button`
-  position: fixed;
-  top: 45vh;
-  // transform: translateY(-50vh);
-  background-color: #ffffff;
-  height: 9.6rem;
-  width: 9.6rem;
-  z-index: 2;
-
-  &:disabled {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  &.prev {
-    left: 9.6rem;
-  }
-
-  &.next {
-    right: 9.6rem;
-  }
-
-  .icon {
-    height: 7.2rem;
-  }
-`;
-
-const Content = styled.div`
-  width: 60vw;
-  margin: auto;
-
-  .passage {
-    color: var(--black_2);
-  }
-`;
-
-const Options = styled.div`
-  width: 39rem;
-  margin: auto;
-  display: none;
-
-  &.show {
-    display: block;
-  }
-
-  .item {
-    height: 6rem;
-    width: 100%;
-    border: 5px solid #ffffff;
-    border-radius: 2rem;
-    background-color: transparent;
-    position: relative;
-    margin-bottom: 2.4rem;
-    padding: 0 1.6rem;
-    transition: all 0.2s ease-out;
-
-    .bunny {
-      display: none;
-      position: absolute;
-      bottom: 0;
-      right: 8px;
-      height: 7.4rem;
-    }
-
-    &.selected {
-      background-color: #ffffff;
-
-      .bunny {
-        display: block;
-      }
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-`;
-
-const AudioGroup = styled.div`
-  .pig {
-    height: 20rem;
-  }
-
-  .wave {
-    height: 9.6rem;
-  }
-`;
+import {
+  AudioGroup,
+  Wrapper,
+  Info,
+  Options,
+  Content,
+  NavButton,
+} from "./QuestionLayoutStyles";
 
 const tempSubjects = ["English Language", "Mathematics", "Science"];
 
@@ -458,6 +273,20 @@ const QuestionLayout = () => {
               : null}
             )
           </h4>
+        </div>
+        <div className="textMobile">
+          <span className="ageGroup textUpperCase">
+            Level {questions[currentSection][questionIndex].classId}
+          </span>
+          <span className="subject">
+            (
+            {
+              tempSubjects[
+                questions[currentSection][questionIndex].subjectId - 1
+              ]
+            }
+            )
+          </span>
         </div>
       </Info>
       <Info className="hint">

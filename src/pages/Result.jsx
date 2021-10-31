@@ -43,6 +43,16 @@ const Wrapper = styled.div`
     height: 5.6rem;
     color: #ffffff;
   }
+
+  @media (max-width: 768px) {
+    .illustration {
+      display: none;
+    }
+
+    .title {
+      padding: 2rem;
+    }
+  }
 `;
 
 const Result = () => {

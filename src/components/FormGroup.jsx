@@ -49,6 +49,31 @@ const Wrapper = styled.div`
     color: var(--grey_5);
     margin-bottom: 5px;
   }
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 0 8px;
+
+      input,
+    textarea {
+      display: block;
+      color: var(--black_3);
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      margin: 0 9px;
+
+      ::placeholder {
+        color: var(--grey_5);
+      }
+    }
+
+    label {
+      display: block;
+      color: var(--grey_5);
+      margin-bottom: 5px;
+    }
+  }
 `;
 
 const FormGroup = ({ fieldStyle, type, name, placeholder, required }) => {
