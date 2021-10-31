@@ -40,7 +40,7 @@ const Test = () => {
           />
 
           <div className="content flexColumn alignCenter">
-            <Spacer y={10.8} />
+            <Spacer y={20.8} yMobile={10}/>
             <img src={lion} alt="Cartoon lion" />
             <Spacer y={4.8} />
             <h4 className="title textCenter">

@@ -6,11 +6,11 @@ const Wrapper = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+  border-radius: 20px; 
   height: 5.6rem;
   width: ${(props) =>
     props.fullWidth ? "100%" : props.width ?? "fit-content"};
-  padding: 0 4.4rem;
+  padding: 0 2.4rem;
   background-color: ${(props) => props.bg ?? "var(--primary_main)"};
   color: ${(props) => props.color ?? "#ffffff"};
   font-size: 18px;
@@ -28,7 +28,7 @@ const Wrapper = styled.button`
   &:hover {
     background-color: var(--primary_dark);
   }
-
+ 
   &:disabled {
     opacity: 0.6;
     pointer-events: none;
