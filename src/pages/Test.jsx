@@ -10,23 +10,26 @@ import curly_cyan from "assets/curly_cyan.svg";
 import Button from "components/Button";
 import QuestionLayout from "components/QuestionLayout";
 import Result from "./Result";
+import { useEffect } from "react";
 
 const Instructions = styled(RegisterLayout)``;
 
 const Test = () => {
   const router = useHistory();
-  const [loading, setLoading] = useState(false);
+  const [ageGroup, setAgeGroup] = useState("");
+
+  useEffect(() => {
+    const tempAgeGroup = localStorage.getItem("ageGroup");
+
+    if (tempAgeGroup) {
+      setAgeGroup(parseInt(tempAgeGroup));
+    }
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
       <Route exact path="/test">
-        {loading && (
-          <Loader
-            title="Hang on"
-            description={`This might take a couple \nof seconds.`}
-          />
-        )}
-
         <Instructions className="light">
           <img
             src={curly_yellow}
@@ -48,8 +51,8 @@ const Test = () => {
             </h4>
             <Spacer y={1.2} />
             <span className="description t1 textCenter">
-              This test covers topics in various subjects which include: <br />
-              English language, Mathematics.
+              This test covers topics in the following subjects: <br />
+              English language, Mathematics {ageGroup >= 7 && "and Science"}.
             </span>
             <Spacer y={4.8} />
             <Button
@@ -59,6 +62,7 @@ const Test = () => {
               className="textBold"
               onClick={() => router.push("/test/session")}
             />
+            <Spacer y={4.8} />
           </div>
         </Instructions>
       </Route>

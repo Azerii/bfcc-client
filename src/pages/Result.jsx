@@ -52,6 +52,8 @@ const Result = () => {
     const ovr = localStorage.getItem("ovr");
 
     setScore(ovr);
+
+    localStorage.clear();
     // eslint-disable-next-line
   }, []);
 

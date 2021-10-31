@@ -1,0 +1,76 @@
+const tempQuestions = [
+  [
+    {
+      question: "Where did the bird hop up to?",
+      options: ["The fence", "The nest", "The window", "The garden"],
+      answer: 3,
+      comprehension:
+        "A bird hopped up to my window. I gave her some bread. She made a nest in my garden. Now I look after her little ones.",
+      media_path: "",
+      classId: 1,
+      subjectId: 1,
+    },
+    {
+      question: "Where was Kim going?",
+      options: [
+        "To school",
+        "To a party",
+        "To the bicycle shop",
+        "To the road",
+      ],
+      answer: 1,
+      comprehension:
+        "Kim stopped on her way to school. In the middle of the traffic lay two children. Their bicycles had crashed into each other. Kim ran quickly to help. She saw that no one was hurt. The children pointed to a television camera. ‘We are taking part in a road safety lesson,’ they said.",
+      media_path: "",
+      classId: 1,
+      subjectId: 1,
+    },
+    {
+      question: "Why did Ali go into the temple? ",
+      options: ["To pray", "To sight-see", "To shelter", "To play"],
+      answer: 3,
+      comprehension:
+        "As Ali sheltered in an old temple, his shoulder knocked a secret spring. Instantly, he was thrown into an underground room. In the darkness, the walls seemed to be covered with jewels. Ali rested a while. He knew that desert travellers often imagined strange things.Later, he explored the place for a way to escape. To his amazement, the jewels were still there. He had found a palace that had been buried long ago.",
+      media_path: "",
+      classId: 1,
+      subjectId: 1,
+    },
+    {
+      question: "What equipment assisted Jan in her exploration under water?",
+      options: ["Head band", "Socks", "Diving belt", "Timer"],
+      answer: 3,
+      comprehension:
+        "Jan buckled on her diving belt of metal weights and dropped from the launch. Skipper Kells supervised her air-hose to prevent tangling. Leo, following the bubbles, guided the dinghy above the diver, as she searched the mysterious underwater world. Jan surfaced frequently clutching crayfish. The required number of specimens was almost obtained when the grey nurse shark advanced directly towards her. Jan retreated cautiously without signalling for assistance. The creature brushed by, ignoring her, as baby sharks emerged from some rocky grooves. Their welfare was more important to the shark than the diver’s now motionless figure. ",
+      media_path: "",
+      classId: 1,
+      subjectId: 1,
+    },
+    {
+      question: "Who is the chief enemy of the fox?",
+      options: ["Cat", "Tiger", "Dog", "Man"],
+      answer: 4,
+      comprehension:
+        "Among animals, the fox has no rival for cunning. Suspicious of man, who is its only natural enemy, it will, when pursued, perform extraordinary feats, even alighting on the backs of sheep to divert its scent. Parent foxes share the responsibilities of cub-rearing. Through their hunting expeditions, they acquire an uncanny knowledge of their surroundings which they use in an emergency. This is well illustrated by the story of a hunted fox which led its pursuers to a neglected mine-shaft enclosed by a circular hedge. It appeared to surmount the barrier. The hounds followed headlong, only to fall into the accumulated water below. The fox, however, apparently on familiar territory, had skirted the hedge and subsequently escaped",
+      classId: 1,
+      subjectId: 1,
+    },
+    {
+      question: "Select what you hear",
+      options: ["And", "Here", "Is", "He"],
+      answer: 2,
+      media_path: "sample.mp3",
+      classId: 1,
+      subjectId: 1,
+    },
+  ],
+  [
+    {
+      question: "Choose the correct answer from the number to words",
+      options: ["Eight", "Five", "Six", "Three"],
+      answer: 2,
+      media_path: "number_5.svg",
+      classId: 4,
+      subjectId: 2,
+    },
+  ],
+];

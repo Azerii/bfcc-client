@@ -1,12 +1,18 @@
-/* @font-face {
-  font-family: "Eudoxus Sans Medium";
-  src: url("./fonts/EudoxusSans-Medium.woff2") format("woff2"),
-    url("./fonts/EudoxusSans-Medium.woff") format("woff"),
-    url("./fonts/EudoxusSans-Medium.ttf") format("truetype");
+@font-face {
+  font-family: "Platform Regular";
+  src: url("./fonts/Platform-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-} */
+}
+
+@font-face {
+  font-family: "Platform Bold";
+  src: url("./fonts/Platform-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --primary_lighter: #9f9fff;
@@ -39,6 +45,8 @@
   --black_3: #1a1a1a;
   --black_4: #161616;
   --black_5: #111111;
+  --font_regular: "Platform Regular";
+  --font_bold: "Platform Bold";
 }
 
 * {

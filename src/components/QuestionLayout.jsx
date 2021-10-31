@@ -17,6 +17,8 @@ import Button from "./Button";
 import localStorage from "redux-persist/es/storage";
 import ConfirmModal from "./ConfirmModal";
 import { useEffect } from "react";
+import axios from "axios";
+import Loader from "./Loader";
 
 const Wrapper = styled.div`
   position: relative;
@@ -210,83 +212,6 @@ const AudioGroup = styled.div`
 
 const tempSubjects = ["English Language", "Mathematics", "Science"];
 
-const tempQuestions = [
-  [
-    {
-      question: "Where did the bird hop up to?",
-      options: ["The fence", "The nest", "The window", "The garden"],
-      answer: 3,
-      comprehension:
-        "A bird hopped up to my window. I gave her some bread. She made a nest in my garden. Now I look after her little ones.",
-      media_path: "",
-      classId: 1,
-      subjectId: 1,
-    },
-    {
-      question: "Where was Kim going?",
-      options: [
-        "To school",
-        "To a party",
-        "To the bicycle shop",
-        "To the road",
-      ],
-      answer: 1,
-      comprehension:
-        "Kim stopped on her way to school. In the middle of the traffic lay two children. Their bicycles had crashed into each other. Kim ran quickly to help. She saw that no one was hurt. The children pointed to a television camera. ‘We are taking part in a road safety lesson,’ they said.",
-      media_path: "",
-      classId: 1,
-      subjectId: 1,
-    },
-    {
-      question: "Why did Ali go into the temple? ",
-      options: ["To pray", "To sight-see", "To shelter", "To play"],
-      answer: 3,
-      comprehension:
-        "As Ali sheltered in an old temple, his shoulder knocked a secret spring. Instantly, he was thrown into an underground room. In the darkness, the walls seemed to be covered with jewels. Ali rested a while. He knew that desert travellers often imagined strange things.Later, he explored the place for a way to escape. To his amazement, the jewels were still there. He had found a palace that had been buried long ago.",
-      media_path: "",
-      classId: 1,
-      subjectId: 1,
-    },
-    {
-      question: "What equipment assisted Jan in her exploration under water?",
-      options: ["Head band", "Socks", "Diving belt", "Timer"],
-      answer: 3,
-      comprehension:
-        "Jan buckled on her diving belt of metal weights and dropped from the launch. Skipper Kells supervised her air-hose to prevent tangling. Leo, following the bubbles, guided the dinghy above the diver, as she searched the mysterious underwater world. Jan surfaced frequently clutching crayfish. The required number of specimens was almost obtained when the grey nurse shark advanced directly towards her. Jan retreated cautiously without signalling for assistance. The creature brushed by, ignoring her, as baby sharks emerged from some rocky grooves. Their welfare was more important to the shark than the diver’s now motionless figure. ",
-      media_path: "",
-      classId: 1,
-      subjectId: 1,
-    },
-    {
-      question: "Who is the chief enemy of the fox?",
-      options: ["Cat", "Tiger", "Dog", "Man"],
-      answer: 4,
-      comprehension:
-        "Among animals, the fox has no rival for cunning. Suspicious of man, who is its only natural enemy, it will, when pursued, perform extraordinary feats, even alighting on the backs of sheep to divert its scent. Parent foxes share the responsibilities of cub-rearing. Through their hunting expeditions, they acquire an uncanny knowledge of their surroundings which they use in an emergency. This is well illustrated by the story of a hunted fox which led its pursuers to a neglected mine-shaft enclosed by a circular hedge. It appeared to surmount the barrier. The hounds followed headlong, only to fall into the accumulated water below. The fox, however, apparently on familiar territory, had skirted the hedge and subsequently escaped",
-      classId: 1,
-      subjectId: 1,
-    },
-    {
-      question: "Select what you hear",
-      options: ["And", "Here", "Is", "He"],
-      answer: 2,
-      media_path: "sample.mp3",
-      classId: 1,
-      subjectId: 1,
-    },
-  ],
-  [
-    {
-      question: "Choose the correct answer from the number to words",
-      options: ["Eight", "Five", "Six", "Three"],
-      answer: 2,
-      media_path: "number_5.svg",
-      classId: 4,
-      subjectId: 2,
-    },
-  ],
-];
-
 function isAudioType(s) {
   return /\.(mp3|mp4)$/i.test(s);
 }
@@ -297,7 +222,8 @@ function isImageType(s) {
 
 const QuestionLayout = () => {
   const router = useHistory();
-  const [questions, setQuestions] = useState(tempQuestions);
+  const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState([]);
   const [currentSection, setCurrentSection] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [allSelected, setAllSelected] = useState(new Map());
@@ -445,23 +371,93 @@ const QuestionLayout = () => {
     document.querySelector("#confirmModal").classList.add("show");
   };
 
+  const getQuestions = async (subjectId, ageGroupId) => {
+    const data = {
+      subjectId,
+      ageGroupId,
+    };
+    try {
+      let res = await axios.get(
+        "https://bfcc-backend.herokuapp.com/api/v1/quest-by-subj-agrp",
+        {
+          params: data,
+        }
+      );
+
+      return res?.data;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const getQuestionsByAgeGroup = async () => {
+    setLoading(true);
+    let ageGroup = parseInt(await localStorage.getItem("ageGroup"));
+    let __questions = [];
+
+    if (ageGroup === 1) {
+      const englishQ = await getQuestions(1, 1);
+      const mathQ = await getQuestions(2, 1);
+
+      __questions.push(englishQ, mathQ);
+    } else if (ageGroup < 7) {
+      const englishQ = await getQuestions(1, ageGroup);
+      const mathQ1 = await getQuestions(2, ageGroup - 1);
+      const mathQ2 = await getQuestions(2, ageGroup);
+
+      __questions.push(englishQ, mathQ1, mathQ2);
+    } else if (ageGroup >= 7) {
+      const englishQ = await getQuestions(1, ageGroup);
+      const mathQ1 = await getQuestions(2, ageGroup - 1);
+      const mathQ2 = await getQuestions(2, ageGroup);
+      const scienceQ = await getQuestions(3, ageGroup);
+
+      __questions.push(englishQ, mathQ1, mathQ2, scienceQ);
+    }
+
+    setQuestions(__questions);
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getQuestionsByAgeGroup();
+
+    // eslint-disable-next-line
+  }, []);
+
+  if (loading) {
+    return (
+      <Loader
+        title="Hang on"
+        description={`This might take a couple \nof seconds.`}
+      />
+    );
+  }
+
   return (
     <Wrapper>
       <Info className="level">
         <img src={elephant} alt="Cartoon elephant" className="image" />
         <div className="text">
-          <span className="ageGroup textUpperCase">
-            Level {questions[currentSection][questionIndex].classId}
-          </span>
-          <span className="subject">
+          <h4 className="ageGroup textUpperCase">
+            Level{" "}
+            {questions[currentSection]
+              ? parseInt(questions[currentSection][questionIndex]?.ageGroupId)
+              : null}
+          </h4>
+          <h4 className="subject">
             (
-            {
-              tempSubjects[
-                questions[currentSection][questionIndex].subjectId - 1
-              ]
-            }
+            {questions[currentSection]
+              ? tempSubjects[
+                  parseInt(
+                    questions[currentSection][questionIndex]?.subjectId
+                  ) - 1
+                ]
+              : null}
             )
-          </span>
+          </h4>
         </div>
       </Info>
       <Info className="hint">
@@ -480,14 +476,22 @@ const QuestionLayout = () => {
 
       <NavButton
         className="flexRow alignCenter justifyCenter circle prev"
-        disabled={!questions[currentSection][questionIndex - 1]}
+        disabled={
+          questions[currentSection]
+            ? !questions[currentSection][questionIndex - 1]
+            : false
+        }
         onClick={prevQuestion}
       >
         <img src={left_arrow} alt="Left Arrow" className="icon" />
       </NavButton>
       <NavButton
         className="flexRow alignCenter justifyCenter circle next"
-        disabled={!questions[currentSection][questionIndex + 1]}
+        disabled={
+          questions[currentSection]
+            ? !questions[currentSection][questionIndex + 1]
+            : false
+        }
         onClick={nextQuestion}
       >
         <img src={right_arrow} alt="Right Arrow" className="icon" />
@@ -500,95 +504,105 @@ const QuestionLayout = () => {
         handleSubmit={handleSubmit}
       />
 
-      {!questions[currentSection][questionIndex + 1] && (
-        <Button
-          type="button"
-          text={questions[currentSection + 1] ? "Next section" : "Submit"}
-          className="nextSection"
-          onClick={
-            questions[currentSection + 1] ? nextSection : showConfirmModal
-          }
-        />
-      )}
-
-      <Content className="flexColumn alignCenter">
-        <Spacer y={9.6} />
-        <p className="questionNumber textCenter textUpperCase">
-          OUESTION {questionIndex + 1} 0F {questions[currentSection].length}
-        </p>
-        <Spacer y={2.4} />
-        {questions[currentSection][questionIndex]?.comprehension && (
-          <h3 className="passage textCenter">
-            {questions[currentSection][questionIndex]?.comprehension}
-          </h3>
-        )}
-        {questions[currentSection][questionIndex]?.comprehension && (
-          <Spacer y={4.8} />
-        )}
-        {questions[currentSection][questionIndex]?.comprehension && (
-          <h4 className="title question textCenter">
-            {questions[currentSection][questionIndex]?.question}
-          </h4>
-        )}
-        {!questions[currentSection][questionIndex]?.comprehension && (
-          <h3 className="title question textCenter textUpperCase">
-            {questions[currentSection][questionIndex]?.question}
-          </h3>
-        )}
-        <Spacer y={2.4} />
-        {questions[currentSection][questionIndex]?.media_path && (
-          <Spacer y={2.4} />
-        )}
-        {isAudioType(questions[currentSection][questionIndex]?.media_path) && (
-          <AudioGroup className="flexRow alignCenter">
-            <audio src={audio_sample} className="audioFile"></audio>
-            <img src={pig_alone} alt="Cartoon pig" className="pig" />
-            <Spacer x={2.4} />
-            <button className="playAudio" onClick={playAudio}>
-              <img src={play} alt="play" className="icon" />
-            </button>
-            <Spacer x={0.6} />
-            <img src={sound_wave} alt="Sound wave" className="wave" />
-          </AudioGroup>
-        )}
-        {isImageType(questions[currentSection][questionIndex]?.media_path) && (
-          <img
-            src={image_sample}
-            alt="illustration"
-            className="questionImage"
+      {questions[currentSection] &&
+        !questions[currentSection][questionIndex + 1] && (
+          <Button
+            type="button"
+            text={questions[currentSection + 1] ? "Next section" : "Submit"}
+            className="nextSection"
+            onClick={
+              questions[currentSection + 1] ? nextSection : showConfirmModal
+            }
           />
         )}
-        {questions[currentSection][questionIndex]?.media_path && (
-          <Spacer y={4.8} />
-        )}
-        {questions[currentSection]?.map((question, index) => (
-          <Options
-            className={`${
-              question === questions[currentSection][questionIndex]
-                ? "show"
-                : "hide"
-            }`}
-            key={index}
-          >
-            {question.options?.map((option, index) => (
-              <button
-                key={index}
-                className={`item t1 bold textUpperCase textLeft${
-                  allSelected.get(`${currentSection}${questionIndex}`) ===
-                    option || selectedOption === option
-                    ? " selected"
-                    : ""
-                }`}
-                onClick={() => selectOption(question, option, question.answer)}
-              >
-                <span>{option}</span>
-                <img src={bunny} alt="bunny" className="bunny" />
+
+      {questions[currentSection] && (
+        <Content className="flexColumn alignCenter">
+          <Spacer y={9.6} />
+          <p className="questionNumber textCenter textUpperCase">
+            OUESTION {questionIndex + 1} 0F {questions[currentSection]?.length}
+          </p>
+          <Spacer y={2.4} />
+          {questions[currentSection][questionIndex]?.comprehension && (
+            <h3 className="passage textCenter">
+              {questions[currentSection][questionIndex]?.comprehension}
+            </h3>
+          )}
+          {questions[currentSection][questionIndex]?.comprehension && (
+            <Spacer y={4.8} />
+          )}
+          {questions[currentSection][questionIndex]?.comprehension && (
+            <h4 className="title question textCenter">
+              {questions[currentSection][questionIndex]?.question}
+            </h4>
+          )}
+          {!questions[currentSection][questionIndex]?.comprehension && (
+            <h3 className="title question textCenter textUpperCase">
+              {questions[currentSection][questionIndex]?.question}
+            </h3>
+          )}
+          <Spacer y={2.4} />
+          {questions[currentSection][questionIndex]?.media_path && (
+            <Spacer y={2.4} />
+          )}
+          {isAudioType(
+            questions[currentSection][questionIndex]?.media_path
+          ) && (
+            <AudioGroup className="flexRow alignCenter">
+              <audio src={audio_sample} className="audioFile"></audio>
+              <img src={pig_alone} alt="Cartoon pig" className="pig" />
+              <Spacer x={2.4} />
+              <button className="playAudio" onClick={playAudio}>
+                <img src={play} alt="play" className="icon" />
               </button>
-            ))}
-          </Options>
-        ))}
-        <Spacer y={4.8} />
-      </Content>
+              <Spacer x={0.6} />
+              <img src={sound_wave} alt="Sound wave" className="wave" />
+            </AudioGroup>
+          )}
+          {isImageType(
+            questions[currentSection][questionIndex]?.media_path
+          ) && (
+            <img
+              src={image_sample}
+              alt="illustration"
+              className="questionImage"
+            />
+          )}
+          {questions[currentSection][questionIndex]?.media_path && (
+            <Spacer y={4.8} />
+          )}
+          {questions[currentSection]?.map((question, index) => (
+            <Options
+              className={`${
+                question === questions[currentSection][questionIndex]
+                  ? "show"
+                  : "hide"
+              }`}
+              key={index}
+            >
+              {typeof question.options === "object" &&
+                question.options.map((option, index) => (
+                  <button
+                    key={index}
+                    className={`item t1 bold textUpperCase textLeft${
+                      allSelected.get(`${currentSection}${questionIndex}`) ===
+                        option || selectedOption === option
+                        ? " selected"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      selectOption(question, option, question.answer)
+                    }
+                  >
+                    <span>{option}</span>
+                    <img src={bunny} alt="bunny" className="bunny" />
+                  </button>
+                ))}
+            </Options>
+          ))}
+          <Spacer y={4.8} />
+        </Content>
+      )}
     </Wrapper>
   );
 };
