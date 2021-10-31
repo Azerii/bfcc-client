@@ -79,6 +79,32 @@ const Content = styled.div`
       color: var(--primary_lighter);
     }
   }
+
+  @media (max-width: 768px) {
+    .ageGroups {
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 2.4rem;
+      width: 100%;
+      padding: 0 2.4rem;
+  
+      .item {
+        &:nth-child(9) {
+          grid-column: 1/2;
+        }
+      }
+    }
+
+    .chooseTime {
+      grid-template-columns: 1fr;
+    }
+
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .chooseTime {
+      margin-top: 20rem;
+    }
+  }
 `;
 
 const FormWrapper = styled.form`
@@ -89,6 +115,15 @@ const FormWrapper = styled.form`
   .spanFull {
     grid-column: 1/3;
   }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  
+
+  .spanFull {
+    grid-column: 1/2;
+  }
+}
 `;
 
 const ageGroups = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -148,7 +183,7 @@ const Register = () => {
             alt="Cartoon deer"
             className="illustration bottomRight light"
           />
-          <Spacer y={10.8} />
+          <Spacer y={10.8} yMobile={4.8} />
           <Content className="flexColumn alignCenter">
             <Logo />
             <Spacer y={1.2} />
@@ -169,6 +204,7 @@ const Register = () => {
                     level === ageGroup ? " selected" : ""
                   }`}
                   onClick={() => setAgeGroup(level)}
+                  fullWidth
                 />
               ))}
             </div>
@@ -312,7 +348,7 @@ const Register = () => {
             alt="Cartoon deer"
             className="illustration bottomRight light"
           />
-          <Spacer y={14.4} />
+          <Spacer y={14.4} yMobile={8}/>
           <Content className="flexColumn alignCenter">
             <div className="flexRow chooseTime">
               <button
