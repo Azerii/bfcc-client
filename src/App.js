@@ -1,3 +1,6 @@
+import Contact_Us from "pages/Contact_Us";
+import Landing from "pages/Landing";
+import PrivacyPolicy from "pages/PrivacyPolicy";
 import Register from "pages/Register";
 import Test from "pages/Test";
 import React from "react";
@@ -13,7 +16,11 @@ function App() {
     <Router>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={() => <Redirect to="/register" />} />
+          <Route exact path="/" component={Landing} />
+          <Route path="/contact-us" component={Contact_Us} />
+          <Route path="/policy-privacy" component={PrivacyPolicy} />
+
+          {/* Test */}
           <Route path="/register" component={Register} />
           <Route path="/test" component={Test} />
 

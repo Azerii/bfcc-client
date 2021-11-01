@@ -85,8 +85,7 @@ const Content = styled.div`
       grid-template-columns: repeat(2, 1fr);
       grid-gap: 2.4rem;
       width: 100%;
-      padding: 0 2.4rem;
-  
+
       .item {
         &:nth-child(9) {
           grid-column: 1/2;
@@ -97,7 +96,6 @@ const Content = styled.div`
     .chooseTime {
       grid-template-columns: 1fr;
     }
-
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {
@@ -118,12 +116,11 @@ const FormWrapper = styled.form`
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
-  
 
-  .spanFull {
-    grid-column: 1/2;
+    .spanFull {
+      grid-column: 1/2;
+    }
   }
-}
 `;
 
 const ageGroups = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -354,7 +351,7 @@ const Register = () => {
             alt="Cartoon deer"
             className="illustration bottomRight light"
           />
-          <Spacer y={14.4} yMobile={8}/>
+          <Spacer y={14.4} yMobile={8} />
           <Content className="flexColumn alignCenter">
             <div className="flexRow chooseTime">
               <button

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Loader from "components/Loader";
 import RegisterLayout from "components/RegisterLayout";
 import Spacer from "components/Spacer";
 import { useState } from "react";
@@ -43,7 +42,7 @@ const Test = () => {
           />
 
           <div className="content flexColumn alignCenter">
-            <Spacer y={20.8} yMobile={10}/>
+            <Spacer y={20.8} yMobile={10} />
             <img src={lion} alt="Cartoon lion" />
             <Spacer y={4.8} />
             <h4 className="title textCenter">

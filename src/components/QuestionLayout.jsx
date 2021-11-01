@@ -10,7 +10,7 @@ import sound_wave from "assets/sound_wave.svg";
 import audio_sample from "assets/sample.mp3";
 import image_sample from "assets/number_5.svg";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spacer from "./Spacer";
 import Button from "./Button";
 import localStorage from "redux-persist/es/storage";
@@ -24,6 +24,7 @@ import {
   Content,
   NavButton,
 } from "./QuestionLayoutStyles";
+import axios from "axios";
 
 const tempSubjects = ["English Language", "Mathematics", "Science"];
 
@@ -37,17 +38,17 @@ function isImageType(s) {
 
 const QuestionLayout = () => {
   const router = useHistory();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [currentSection, setCurrentSection] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [allSelected, setAllSelected] = useState(new Map());
   const [selectedOption, setSelectedOption] = useState("");
-  const [confirmPrompt, setConfirmPrompt] = useState("Ready to submit?");
-  const [confirmDescription, setConfirmDescription] = useState(
+  const [confirmPrompt] = useState("Ready to submit?");
+  const [confirmDescription] = useState(
     "Are you sure you want to submit this test? If you select submit, you will not be able to edit your answers."
   );
-  const [confirmActionText, setConfirmActionText] = useState("Submit");
+  const [confirmActionText] = useState("Submit");
 
   const nextQuestion = () => {
     if (questions[currentSection][questionIndex + 1]) {
@@ -274,20 +275,6 @@ const QuestionLayout = () => {
             )
           </h4>
         </div>
-        <div className="textMobile">
-          <span className="ageGroup textUpperCase">
-            Level {questions[currentSection][questionIndex].classId}
-          </span>
-          <span className="subject">
-            (
-            {
-              tempSubjects[
-                questions[currentSection][questionIndex].subjectId - 1
-              ]
-            }
-            )
-          </span>
-        </div>
       </Info>
       <Info className="hint">
         <img src={bear} alt="Cartoon bear" className="image" />
@@ -298,7 +285,7 @@ const QuestionLayout = () => {
 
       <button
         className="home flexRow alignCenter justifyCenter"
-        onClick={() => router.push("/test")}
+        onClick={() => router.push("/register")}
       >
         <img src={homeIcon} alt="Home" className="icon" />
       </button>
@@ -327,6 +314,7 @@ const QuestionLayout = () => {
       </NavButton>
 
       <ConfirmModal
+        className="open"
         prompt={confirmPrompt}
         description={confirmDescription}
         actionText={confirmActionText}
@@ -337,17 +325,21 @@ const QuestionLayout = () => {
         !questions[currentSection][questionIndex + 1] && (
           <Button
             type="button"
-            text={questions[currentSection + 1] ? "Next section" : "Submit"}
+            text={
+              questions[currentSection + 1]?.length ? "Next section" : "Submit"
+            }
             className="nextSection"
             onClick={
-              questions[currentSection + 1] ? nextSection : showConfirmModal
+              questions[currentSection + 1]?.length
+                ? nextSection
+                : showConfirmModal
             }
           />
         )}
 
       {questions[currentSection] && (
         <Content className="flexColumn alignCenter">
-          <Spacer y={9.6} />
+          <Spacer y={9.6} yMobile={7.2} />
           <p className="questionNumber textCenter textUpperCase">
             OUESTION {questionIndex + 1} 0F {questions[currentSection]?.length}
           </p>

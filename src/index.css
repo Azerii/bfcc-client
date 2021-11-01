@@ -35,6 +35,8 @@
   --accent_3_main: #01d8dc;
   --accent_3_dark: #019093;
   --accent_3_darker: #016c6e;
+  --accent_4_lighter: #80ecee;
+  --white: #ffffff;
   --grey_1: #fbfbfb;
   --grey_2: #efefef;
   --grey_3: #cccccc;
@@ -104,6 +106,10 @@ select {
 
 textarea {
   resize: none;
+}
+
+::placeholder {
+  font-family: var(--font_regular);
 }
 
 a {
@@ -276,7 +282,16 @@ p,
   font-weight: 700;
 }
 
+.container {
+  max-width: 100vw;
+  padding: 0 9.6rem;
+}
+
 @media (max-width: 768px) {
+  .container {
+    padding: 0 2.4rem;
+  }
+
   h3 {
     font-size: 30px;
     font-weight: normal;

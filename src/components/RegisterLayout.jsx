@@ -64,12 +64,12 @@ const RegisterLayout = styled.div`
 
   @media (min-width: 769px) and (max-width: 1024px) {
     height: auto;
-
   }
 
   @media (max-width: 768px) {
-     
     height: auto;
+    padding: 0 2.4rem;
+
     .illustration {
       display: none;
     }
@@ -86,19 +86,17 @@ const RegisterLayout = styled.div`
     }
 
     &.light {
-      
-  
       .title {
         color: var(--black_5);
       }
-  
+
       .description {
         color: var(--grey_5);
       }
-  
+
       .illustration {
         display: none;
-  
+
         &.light {
           display: none;
         }

@@ -45,34 +45,32 @@ export const Wrapper = styled.div`
 
   @media (min-width: 769px) and (max-width: 1024px) {
     height: auto;
-
-    .nextSection {
-      display: none;
-    }
-
-    .nextSectionMobile {
-      position: fixed;
-      right: 4.6rem;
-      bottom: 1rem;
-    }
   }
 
   @media (max-width: 768px) {
     height: auto;
 
     .home {
-      top: 2rem;
-      left: 3rem;
+      top: 2.4rem;
+      left: 1rem;
+      height: 3.6rem;
+      width: 3.6rem;
+
+      &::after {
+        height: 2.4rem;
+        width: 2.4rem;
+      }
+
+      .icon {
+        height: 1.6rem;
+      }
     }
 
     .nextSection {
-      display: none;
-    }
-
-    .nextSectionMobile {
-      position: fixed;
-      right: 4.6rem;
-      bottom: 1rem;
+      position: absolute;
+      bottom: 2.4rem;
+      right: 50%;
+      transform: translateX(50%);
     }
   }
 `;
@@ -139,82 +137,25 @@ export const Info = styled.div`
     height: auto;
 
     &.level {
-      .text {
-        display: none;
-      }
-
-      .ageGroup {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        line-height: 20px;
-        height: 3rem;
-        width: 100%;
-        font-size: 3rem;
-        color: #ffffff;
-        font-weight: 800;
-        padding-left: 2rem;
-        margin: auto;
-        right: 30rem;
-      }
-
-      .subject {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        height: 3rem;
-        width: 100%;
-        font-size: 3rem;
-        color: #ffffff;
-        font-weight: 800;
-        padding-left: 2rem;
-        margin: auto;
-        top: 5rem;
-        right: 35.5rem;
-      }
-
-      .image {
-        display: none;
-      }
-    }
-
-    &.hint {
-      display: none;
+      top: 0;
     }
   }
 
   @media (max-width: 768px) {
     &.level {
-        .text {
-          display: none;
-        }
-  
-        .ageGroup {
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          line-height: 15px;
-          height: 3rem;
-          width: 37rem;
-          font-size: 2.2rem;
-          color: #ffffff;
-          font-weight: 800;
-        //   padding-left: 2rem
-          margin: auto;
-          
-        }
-  
-        .subject {
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          height: 4rem;
-          width: 40rem;
-          font-size: 2rem;
-          color: #ffffff;
-          font-weight: 800;
-        //   padding-left: 2rem;
-        }
+      position: absolute;
+      height: auto;
+      width: max-content;
+      top: 2.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .text {
+        position: relative;
+        top: unset;
+        left: unset;
+        max-width: unset;
+      }
   
         .image {
           display: none;
@@ -231,10 +172,10 @@ export const Info = styled.div`
 export const NavButton = styled.button`
   position: fixed;
   top: 45vh;
-  // transform: translateY(-50vh);
   background-color: #ffffff;
   height: 9.6rem;
   width: 9.6rem;
+  padding: 0.8rem;
   z-index: 2;
 
   &:disabled {
@@ -251,24 +192,12 @@ export const NavButton = styled.button`
   }
 
   .icon {
-    height: 7.2rem;
+    height: 100%;
   }
 
-  @media (min-width: 769px) and (max-width: 1024px) {
-    height: auto;
-
-    position: fixed;
-    top: 45vh;
-    // transform: translateY(-50vh);
-    background-color: #ffffff;
-    height: 8rem;
-    width: 8rem;
-    z-index: 2;
-
-    &:disabled {
-      opacity: 0.6;
-      pointer-events: none;
-    }
+  @media (max-width: 767.89px) {
+    height: 3.6rem;
+    width: 3.6rem;
 
     &.prev {
       left: 1rem;
@@ -277,36 +206,18 @@ export const NavButton = styled.button`
     &.next {
       right: 1rem;
     }
-
-    .icon {
-      height: 4rem;
-    }
   }
 
-  @media (max-width: 768px) {
-    position: fixed;
-    top: 45vh;
-    // transform: translateY(-50vh);
-    background-color: #ffffff;
+  @media (width: 768px) {
     height: 5rem;
     width: 5rem;
-    z-index: 2;
-
-    &:disabled {
-      opacity: 0.6;
-      pointer-events: none;
-    }
 
     &.prev {
-      left: 1rem;
+      left: 2.4rem;
     }
 
     &.next {
-      right: 1rem;
-    }
-
-    .icon {
-      height: 3rem;
+      right: 2.4rem;
     }
   }
 `;
@@ -374,20 +285,12 @@ export const Options = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 70vw;
-    line-height: 20px;
-    margin-bottom: 3rem;
+    width: 100%;
+    margin-bottom: 5.6rem;
 
     .item {
-      height: 6rem;
-      width: 100%;
-      border: 5px solid #ffffff;
-      border-radius: 2rem;
-      background-color: transparent;
-      position: relative;
-      margin-bottom: 2.4rem;
-      padding: 0 1.6rem;
-      transition: all 0.2s ease-out;
+      font-size: 14px;
+      border-width: 2px;
     }
   }
 `;
