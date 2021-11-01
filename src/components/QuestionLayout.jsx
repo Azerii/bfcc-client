@@ -216,20 +216,26 @@ const QuestionLayout = () => {
       const englishQ = await getQuestions(1, 1);
       const mathQ = await getQuestions(2, 1);
 
-      __questions.push(englishQ, mathQ);
+      englishQ.length && __questions.push(englishQ);
+      mathQ.length && __questions.push(mathQ);
     } else if (ageGroup < 7) {
       const englishQ = await getQuestions(1, ageGroup);
       const mathQ1 = await getQuestions(2, ageGroup - 1);
       const mathQ2 = await getQuestions(2, ageGroup);
 
-      __questions.push(englishQ, mathQ1, mathQ2);
+      englishQ.length && __questions.push(englishQ);
+      mathQ1.length && __questions.push(mathQ1);
+      mathQ2.length && __questions.push(mathQ2);
     } else if (ageGroup >= 7) {
       const englishQ = await getQuestions(1, ageGroup);
       const mathQ1 = await getQuestions(2, ageGroup - 1);
       const mathQ2 = await getQuestions(2, ageGroup);
       const scienceQ = await getQuestions(3, ageGroup);
 
-      __questions.push(englishQ, mathQ1, mathQ2, scienceQ);
+      englishQ.length && __questions.push(englishQ);
+      mathQ1.length && __questions.push(mathQ1);
+      mathQ2.length && __questions.push(mathQ2);
+      scienceQ.length && __questions.push(scienceQ);
     }
 
     setQuestions(__questions);
