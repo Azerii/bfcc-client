@@ -51,12 +51,11 @@ const Wrapper = Styled.div`
   }
 
   .prototype {
-      height: 84.714rem;
       width: 110.2rem;
-      margin: 0 16.9rem;
       z-index: 1;
       position: absolute;
-      
+      left: 50%;
+    transform: translateX(-50%);
   }
 
   .star{
@@ -123,7 +122,7 @@ const Header = ({ text }) => {
         <Link to="/register" className="startHere">
           <Button
             className="btn"
-            text="start here"
+            text="Take test"
             padding
             fullWidth
             big
@@ -156,12 +155,7 @@ const Header = ({ text }) => {
           ></Button>
         </Link>
         <Spacer y={12.2} />
-        <img
-          src={textPrototype}
-          alt="text prototype"
-          className="prototype"
-          alignEnd
-        />
+        <img src={textPrototype} alt="text prototype" className="prototype" />
         {/* <img src={iphone12} alt="iphone12" className="iphone" /> */}
         <img src={groupStar} alt="star" className="star" />
         <img src={groupBook} alt="star" className="book" />

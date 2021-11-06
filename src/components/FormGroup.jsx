@@ -54,7 +54,7 @@ const Wrapper = styled.div`
     height: auto;
     padding: 0 8px;
 
-      input,
+    input,
     textarea {
       display: block;
       color: var(--black_3);
@@ -111,6 +111,7 @@ const FormGroup = ({ fieldStyle, type, name, placeholder, required }) => {
               toggleLabel(e);
               field.onChange(e);
             }}
+            autoComplete="off"
           />
         )}
         {fieldStyle === "longText" && (
@@ -120,6 +121,7 @@ const FormGroup = ({ fieldStyle, type, name, placeholder, required }) => {
             name={name}
             placeholder={placeholder}
             required={required || false}
+            autoComplete="off"
             {...field}
           />
         )}

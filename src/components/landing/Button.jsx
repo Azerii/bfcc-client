@@ -33,6 +33,10 @@ const Wrapper = styled.button`
     width: max-content;
     height: 2rem;
   }
+
+  @media screen and (max-width: 768px) {
+    height: 4.8rem;
+  }
 `;
 
 const Button = ({ text, ...props }) => {

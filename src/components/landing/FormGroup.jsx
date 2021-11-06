@@ -218,7 +218,7 @@ const FormGroup = () => {
             )}
             <input
               id="name"
-              class="form-field"
+              className="form-field"
               type="text"
               placeholder="Name"
               name="name"

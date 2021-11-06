@@ -13,6 +13,10 @@ const Wrapper = styled(Backdrop)`
     border-radius: 2rem;
   }
 
+  .image {
+    width: 70%;
+  }
+
   .btn {
     height: 5.6rem;
     min-width: 16.3rem;
@@ -29,6 +33,20 @@ const Wrapper = styled(Backdrop)`
     &.actionBtn {
       background-color: var(--primary_main);
       color: #ffffff;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .card {
+      width: 90%;
+    }
+
+    .image {
+      width: 100%;
+    }
+
+    .btn {
+      min-width: unset;
     }
   }
 `;

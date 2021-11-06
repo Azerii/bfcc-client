@@ -5,45 +5,43 @@ import Button from "./Button";
 import groupAnimals from "assets/landing/groupAnimals.svg";
 
 const Wrapper = Styled.div`
-Height: 81.6rem;
-background-color: var(--accent_4_lighter);
-position: relative;
+  Height: 81.6rem;
+  background-color: var(--accent_4_lighter);
+  position: relative;
 
-.learningsCaption {
+  .learningsCaption {
     font-size: 9.4rem;
     font-style: normal;
     font-weight: 700;
     line-height: 8.4rem;
     text-align: center;
     color: var(--black_5); 
-}
-
-.active{
-    color: var(--primary_main);
-}
-
-.learningsDescription{ 
-    text-align: center;
-    color: #404040;
-}
-
-.btnStart{
-    margin: 0 auto;
-}
-
-.animals{
-   
-    margin: 0 5rem;
-    top: -1rem;
-}
-
-@media(max-width: 768px) {
-
-  height: auto;
-  .learningsCaption {
-    font-size:  3.6rem;
-    line-height: 5.2rem;
   }
+
+  .active{
+      color: var(--primary_main);
+  }
+
+  .learningsDescription{ 
+      text-align: center;
+      color: #404040;
+  }
+
+  .btnStart{
+      margin: 0 auto;
+  }
+
+  .animals {
+    width: 100%;
+  }
+
+  @media(max-width: 768px) {
+    height: auto;
+
+    .learningsCaption {
+      font-size:  3.6rem;
+      line-height: 5.2rem;
+    }
 
     .learningsDescription {
       font-size: 1.8rem;
@@ -55,13 +53,7 @@ position: relative;
         display: none;
       }
     }
-
-    .animals{
-      width: 37rem;
-      top: -1rem;
-      margin: auto;
   }
-}
 `;
 
 const Learnings = ({ text }) => {

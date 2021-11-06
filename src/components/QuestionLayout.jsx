@@ -51,7 +51,10 @@ const QuestionLayout = () => {
   const [confirmActionText] = useState("Submit");
 
   const nextQuestion = () => {
-    if (questions[currentSection][questionIndex + 1]) {
+    if (
+      questions[currentSection] &&
+      questions[currentSection][questionIndex + 1]
+    ) {
       setQuestionIndex(questionIndex + 1);
     } else {
       return false;
@@ -59,7 +62,10 @@ const QuestionLayout = () => {
   };
 
   const prevQuestion = () => {
-    if (questions[currentSection][questionIndex - 1]) {
+    if (
+      questions[currentSection] &&
+      questions[currentSection][questionIndex - 1]
+    ) {
       setQuestionIndex(questionIndex - 1);
     } else {
       return false;
@@ -212,30 +218,35 @@ const QuestionLayout = () => {
     let ageGroup = parseInt(await localStorage.getItem("ageGroup"));
     let __questions = [];
 
-    if (ageGroup === 1) {
-      const englishQ = await getQuestions(1, 1);
-      const mathQ = await getQuestions(2, 1);
+    try {
+      if (ageGroup === 1) {
+        const englishQ = await getQuestions(1, 1);
+        const mathQ = await getQuestions(2, 1);
 
-      englishQ.length && __questions.push(englishQ);
-      mathQ.length && __questions.push(mathQ);
-    } else if (ageGroup < 7) {
-      const englishQ = await getQuestions(1, ageGroup);
-      const mathQ1 = await getQuestions(2, ageGroup - 1);
-      const mathQ2 = await getQuestions(2, ageGroup);
+        englishQ.length && __questions.push(englishQ);
+        mathQ.length && __questions.push(mathQ);
+      } else if (ageGroup < 7) {
+        const englishQ = await getQuestions(1, ageGroup);
+        const mathQ1 = await getQuestions(2, ageGroup - 1);
+        const mathQ2 = await getQuestions(2, ageGroup);
 
-      englishQ.length && __questions.push(englishQ);
-      mathQ1.length && __questions.push(mathQ1);
-      mathQ2.length && __questions.push(mathQ2);
-    } else if (ageGroup >= 7) {
-      const englishQ = await getQuestions(1, ageGroup);
-      const mathQ1 = await getQuestions(2, ageGroup - 1);
-      const mathQ2 = await getQuestions(2, ageGroup);
-      const scienceQ = await getQuestions(3, ageGroup);
+        englishQ.length && __questions.push(englishQ);
+        mathQ1.length && __questions.push(mathQ1);
+        mathQ2.length && __questions.push(mathQ2);
+      } else if (ageGroup >= 7) {
+        const englishQ = await getQuestions(1, ageGroup);
+        const mathQ1 = await getQuestions(2, ageGroup - 1);
+        const mathQ2 = await getQuestions(2, ageGroup);
+        const scienceQ = await getQuestions(3, ageGroup);
 
-      englishQ.length && __questions.push(englishQ);
-      mathQ1.length && __questions.push(mathQ1);
-      mathQ2.length && __questions.push(mathQ2);
-      scienceQ.length && __questions.push(scienceQ);
+        englishQ.length && __questions.push(englishQ);
+        mathQ1.length && __questions.push(mathQ1);
+        mathQ2.length && __questions.push(mathQ2);
+        scienceQ.length && __questions.push(scienceQ);
+      }
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
     }
 
     setQuestions(__questions);

@@ -3,51 +3,44 @@ import Spacer from "components/Spacer";
 import { Link } from "react-router-dom";
 
 const Wrapper = Styled.div`
-background-color: var(--primary_main);
-color: #fff;
-height: 47.2rem;
-position: relative;
+  background-color: var(--primary_main);
+  color: #fff;
+  height: 47.2rem;
+  position: relative;
 
-.line {
-    width: 124.8rem;
-    height: 0.2rem;
-    border: 1px solid white;
-}
+  .bottom {
+      border-top: 1px solid white;
+  }
 
-.footerCopyright {
-font-size: 18px;
-font-style: normal;
-font-weight: 400;
-line-height: 24px;
-letter-spacing: 0em;
+  .footerCopyright, .link {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  white-space: nowrap;
+  }
 
-}
+  @media(max-width: 768px) {
 
-@media(max-width: 768px) {
-//    height: auto;
-.flexRow {
-    flex-direction: column;
-}
+    .flexRow {
+        flex-direction: column;
+    }
 
-.footerCaption {
-    width: 100%;
-    font-size: 10px;
-}
+    .footerCaption {
+        width: 100%;
+        font-size: 10px;
+    }
 
-.footerCopyright{
-    font-size: 14px;
-}
-// .home,
-// .faq,
-// .contact {
-//     padding: 1rem;
-// }
+    .footerCopyright{
+        font-size: 14px;
+    }
 
-.line {
-    width: 30.8rem;
-}
+    .bottom {
+      text-align: center;
+    }
 
-}  
+  }  
 `;
 
 const Footer = () => {
@@ -55,26 +48,29 @@ const Footer = () => {
     <Wrapper className="container">
       <Spacer y={9.6} />
       <div className="footerContact p1 flexRow alignCenter justifyCenter">
-        <Link to="/" className="home">
+        <Link to="/" className="link">
           Home
         </Link>
-        <Spacer x={4.8} />
-        <Link to="/contact-us" className="contact">
+        <Spacer x={4.8} yMobile={1.2} />
+        <Link to="/contact-us" className="link">
           Contact Us
         </Link>
-        <Spacer x={4.8} />
-        <Link to="/faq" className="faq">
+        <Spacer x={4.8} yMobile={1.2} />
+        <Link to="/faq" className="link">
           Help/FAQ
         </Link>
       </div>
-      <Spacer y={14.4} />
-      <div className="line">
-        <Spacer y={9.6} />
+      <Spacer y={14.4} yMobile={4.8} />
+      <div className="bottom">
+        <Spacer y={9.6} yMobile={4.8} />
         <div className="footerCaption flexRow justifySpaceBetween">
           <div className="footerCopyright">
             Copyright © 2021 BFCC, Inc. All rights reserved.
           </div>
-          <Link to="/policy-privacy">Privacy policy</Link>
+          <Spacer yMobile={1.2} />
+          <Link to="/policy-privacy" className="link">
+            Privacy policy
+          </Link>
         </div>
       </div>
     </Wrapper>

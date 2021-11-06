@@ -298,10 +298,6 @@ p,
     line-height: 40px;
     letter-spacing: 0em;
   }
-
-  p {
-    font-size: 25px;
-  }
 }
 @media (min-width: 769px) and (max-width: 1024px) {
   h3 {
@@ -309,11 +305,5 @@ p,
     font-weight: normal;
     line-height: 40px;
     letter-spacing: 0em;
-  }
-
-  p {
-    font-size: 30px;
-    line-height: 30px;
-    margin-bottom: 1rem;
   }
 }
