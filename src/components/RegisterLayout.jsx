@@ -70,30 +70,17 @@ const RegisterLayout = styled.div`
     height: auto;
     padding: 0 2.4rem;
 
-    .illustration {
-      display: none;
-    }
-
     .title {
       font-size: 2.5rem;
     }
 
     .description {
       font-size: 2rem;
-      width: 70%;
       text-align: center;
       margin: auto;
     }
 
     &.light {
-      .title {
-        color: var(--black_5);
-      }
-
-      .description {
-        color: var(--grey_5);
-      }
-
       .illustration {
         display: none;
 
@@ -101,6 +88,12 @@ const RegisterLayout = styled.div`
           display: none;
         }
       }
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .illustration {
+      display: none;
     }
   }
 `;

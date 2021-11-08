@@ -49,10 +49,10 @@ const Content = styled.div`
     grid-gap: 5.2rem;
 
     .item {
-      height: 28rem;
+      min-height: 28rem;
       width: 24rem;
       background-color: #ffffff;
-      padding: 0 1.4rem;
+      padding: 1.4rem;
       border: 1px solid #efefef;
       border-radius: 2rem;
       transition: all 0.2s ease-out;
@@ -292,6 +292,7 @@ const Register = () => {
                   />
                   <FormGroup
                     fieldStyle="shortText"
+                    type="number"
                     name="phone"
                     placeholder={`Parent's phone number`}
                   />

@@ -36,6 +36,8 @@ function isImageType(s) {
   return /\.(jpe?g|png|gif|bmp|svg)$/i.test(s);
 }
 
+const base_url = "https://bfcc-backend.herokuapp.com/api/v1";
+
 const QuestionLayout = () => {
   const router = useHistory();
   const [loading, setLoading] = useState(true);
@@ -169,23 +171,51 @@ const QuestionLayout = () => {
     const result = await gradeSection();
 
     if (result?.graded) {
+      window.onbeforeunload = null;
       let acc = 0,
         ovr;
 
       const scores = JSON.parse(await localStorage.getItem("scores"));
+      const ageGroup = JSON.parse(await localStorage.getItem("ageGroup"));
+      const details = JSON.parse(await localStorage.getItem("details"));
       const numberOfSections = Object.keys(scores).length;
+
+      details.ageGroup = ageGroup;
+      details.scores = [];
 
       Object.keys(scores).forEach((key) => {
         acc += parseInt(scores[key]);
+
+        let score = scores[key];
+        let subject = key.split(" ").slice(2).join(" ");
+        let scoreData = { subject, score };
+
+        details.scores.push(scoreData);
       });
 
       ovr = parseInt(acc / numberOfSections);
 
-      localStorage.setItem("ovr", ovr);
+      details.overall_score = ovr;
 
-      window.location.replace("/test/result");
+      try {
+        setLoading(true);
+        const res = await axios.post(`${base_url}/result`, details);
+
+        if (res?.data) {
+          localStorage.setItem("ovr", ovr);
+
+          window.location.replace("/test/result");
+        } else {
+          setLoading(false);
+          alert("Something went wrong");
+        }
+      } catch (e) {
+        setLoading(false);
+        alert("An error occurred");
+        console.log(e);
+      }
     } else {
-      alert("An error occurred");
+      return;
     }
   };
 
@@ -199,12 +229,9 @@ const QuestionLayout = () => {
       ageGroupId,
     };
     try {
-      let res = await axios.get(
-        "https://bfcc-backend.herokuapp.com/api/v1/quest-by-subj-agrp",
-        {
-          params: data,
-        }
-      );
+      let res = await axios.get(`${base_url}/quest-by-subj-agrp`, {
+        params: data,
+      });
 
       return res?.data;
     } catch (e) {
@@ -223,26 +250,26 @@ const QuestionLayout = () => {
         const englishQ = await getQuestions(1, 1);
         const mathQ = await getQuestions(2, 1);
 
-        englishQ.length && __questions.push(englishQ);
-        mathQ.length && __questions.push(mathQ);
+        englishQ?.length && __questions.push(englishQ);
+        mathQ?.length && __questions.push(mathQ);
       } else if (ageGroup < 7) {
         const englishQ = await getQuestions(1, ageGroup);
         const mathQ1 = await getQuestions(2, ageGroup - 1);
         const mathQ2 = await getQuestions(2, ageGroup);
 
-        englishQ.length && __questions.push(englishQ);
-        mathQ1.length && __questions.push(mathQ1);
-        mathQ2.length && __questions.push(mathQ2);
+        englishQ?.length && __questions.push(englishQ);
+        mathQ1?.length && __questions.push(mathQ1);
+        mathQ2?.length && __questions.push(mathQ2);
       } else if (ageGroup >= 7) {
         const englishQ = await getQuestions(1, ageGroup);
         const mathQ1 = await getQuestions(2, ageGroup - 1);
         const mathQ2 = await getQuestions(2, ageGroup);
         const scienceQ = await getQuestions(3, ageGroup);
 
-        englishQ.length && __questions.push(englishQ);
-        mathQ1.length && __questions.push(mathQ1);
-        mathQ2.length && __questions.push(mathQ2);
-        scienceQ.length && __questions.push(scienceQ);
+        englishQ?.length && __questions.push(englishQ);
+        mathQ1?.length && __questions.push(mathQ1);
+        mathQ2?.length && __questions.push(mathQ2);
+        scienceQ?.length && __questions.push(scienceQ);
       }
     } catch (e) {
       setLoading(false);
@@ -256,7 +283,11 @@ const QuestionLayout = () => {
 
   useEffect(() => {
     getQuestionsByAgeGroup();
-
+    window.onbeforeunload = (e) => {
+      e.preventDefault();
+      e.returnValue =
+        "Are you sure you want to leave? Your progress will not be saved";
+    };
     // eslint-disable-next-line
   }, []);
 

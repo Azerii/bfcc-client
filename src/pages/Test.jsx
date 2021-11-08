@@ -51,7 +51,8 @@ const Test = () => {
             <Spacer y={1.2} /> */}
             <span className="description t1 textCenter">
               This test covers topics in the following subjects: <br />
-              English language, Mathematics {ageGroup >= 7 && "and Science"}.
+              English language, Mathematics
+              {ageGroup >= 7 && " Biology, Chemistry and Physics"}.
             </span>
             <Spacer y={4.8} />
             <Button

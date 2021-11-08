@@ -209,7 +209,7 @@ const FormGroup = () => {
           className="register-form container"
           onSubmit={formik.handleSubmit}
         >
-          {/* {submitted ? <div class="success-message">Submitted!</div> : null} */}
+          {/* {submitted ? <div className="success-message">Submitted!</div> : null} */}
           <div className="fieldWrapper">
             {formik.values.name && (
               <label htmlFor="name" className="name">
@@ -241,7 +241,7 @@ const FormGroup = () => {
             )}
             <input
               id="email-address"
-              class="form-field"
+              className="form-field"
               type="text"
               placeholder="Email Address"
               name="emailAddress"
@@ -264,7 +264,7 @@ const FormGroup = () => {
             )}
             <input
               id="phone-number"
-              class="form-field"
+              className="form-field"
               type="text"
               placeholder="Phone Number"
               name="phoneNumber"
@@ -287,7 +287,7 @@ const FormGroup = () => {
             )}
             <textarea
               id="message"
-              class="form-field"
+              className="form-field"
               type="text"
               placeholder="Message"
               name="message"

@@ -63,7 +63,7 @@ const Result = () => {
 
     setScore(ovr);
 
-    localStorage.clear();
+    // localStorage.clear();
     // eslint-disable-next-line
   }, []);
 

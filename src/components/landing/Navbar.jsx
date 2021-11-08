@@ -5,22 +5,21 @@ import Button from "./Button";
 import { Link } from "react-router-dom";
 
 const Wrapper = Styled.div`
-Height: 9.6rem;
-background-color: var(--primary_main);
-position : relative;
+  Height: 9.6rem;
+  background-color: var(--primary_main);
+  position : relative;
 
-.logo {
-    width: 7.3rem;
-    height: 7.2rem;
-}
+  .logo {
+      width: 7.3rem;
+      height: 7.2rem;
+  }
 
-@media(max-width: 768px) {
-
-  height: auto;
-}
+  @media(max-width: 768px) {
+    height: auto;
+  }
 `;
 
-const Navbar = ({ text }) => {
+const Navbar = () => {
   return (
     <Wrapper className="section">
       <Spacer y={1.6} />
@@ -28,10 +27,10 @@ const Navbar = ({ text }) => {
         <Link to="/">
           <img src={logo} alt="Logo" className="logo" />
         </Link>
-        <Link to="/start-here" className="startHere">
+        <Link to="/register" className="startHere">
           <Button
             className="btn"
-            text="start here"
+            text="Start here"
             padding
             maxWidth
             big

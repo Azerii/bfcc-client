@@ -141,7 +141,7 @@ export const Info = styled.div`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     &.level {
       position: absolute;
       height: auto;
