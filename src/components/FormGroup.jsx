@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { forwardRef, useMemo, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useField } from "formik";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const Wrapper = styled.div`
   .fieldWrapper {
@@ -76,9 +78,17 @@ const Wrapper = styled.div`
   }
 `;
 
-const FormGroup = ({ fieldStyle, type, name, placeholder, required }) => {
+const FormGroup = ({
+  fieldStyle,
+  type,
+  name,
+  placeholder,
+  required,
+  fieldFormat,
+}) => {
   const [field, meta] = useField(name);
   const [showLabel, setShowLabel] = useState(false);
+  const [phoneVal, setPhoneVal] = useState();
 
   const toggleLabel = (e) => {
     if (e.target.value.length > 0) {
@@ -88,32 +98,67 @@ const FormGroup = ({ fieldStyle, type, name, placeholder, required }) => {
     }
   };
 
+  const CustomPhoneInput = forwardRef(({ value, onChange, onBlur }, ref) => (
+    <input
+      ref={ref}
+      // {...field}
+      className="textSmall"
+      id={name}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      required={required || false}
+      onBlur={(e) => {
+        toggleLabel(e);
+        field.onBlur(e);
+        onBlur(e);
+      }}
+      onChange={(e) => {
+        toggleLabel(e);
+        field.onChange(e);
+        onChange(e);
+      }}
+      autoComplete="off"
+    />
+  ));
+
+  // eslint-disable-next-line
+  const __CustomPhoneInput = useMemo(() => CustomPhoneInput, []);
+
   return (
     <Wrapper fieldStyle={fieldStyle}>
       <div
         className={`fieldWrapper${meta.touched && meta.error ? " error" : ""}`}
       >
         {showLabel && <label htmlFor={name}>{placeholder}</label>}
-        {fieldStyle === "shortText" && (
-          <input
-            {...field}
-            className="textSmall"
-            type={type || "text"}
-            id={name}
-            name={name}
-            placeholder={placeholder}
-            required={required || false}
-            onBlur={(e) => {
-              toggleLabel(e);
-              field.onBlur(e);
-            }}
-            onChange={(e) => {
-              toggleLabel(e);
-              field.onChange(e);
-            }}
-            autoComplete="off"
-          />
-        )}
+        {fieldStyle === "shortText" &&
+          (fieldFormat === "phone" ? (
+            <PhoneInput
+              defaultCountry="GB"
+              inputComponent={__CustomPhoneInput}
+              value={phoneVal}
+              onChange={setPhoneVal}
+            />
+          ) : (
+            <input
+              {...field}
+              className="textSmall"
+              type={type || "text"}
+              id={name}
+              name={name}
+              placeholder={placeholder}
+              required={required || false}
+              onBlur={(e) => {
+                toggleLabel(e);
+                field.onBlur(e);
+              }}
+              onChange={(e) => {
+                toggleLabel(e);
+                field.onChange(e);
+              }}
+              autoComplete="off"
+            />
+          ))}
         {fieldStyle === "longText" && (
           <textarea
             className="textSmall"
@@ -140,6 +185,7 @@ FormGroup.propTypes = {
   placeholder: PropTypes.string.isRequired,
   required: PropTypes.bool,
   onChange: PropTypes.func,
+  fieldFormat: PropTypes.string,
 };
 
 export default FormGroup;

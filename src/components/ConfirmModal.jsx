@@ -51,14 +51,20 @@ const Wrapper = styled(Backdrop)`
   }
 `;
 
-const ConfirmModal = ({ prompt, description, actionText, handleSubmit }) => {
+const ConfirmModal = ({
+  prompt,
+  description,
+  actionText,
+  callback,
+  warning,
+}) => {
   return (
     <Wrapper
       id={"confirmModal"}
       className="confirmModal flexRow alignCenter justifyCenter"
     >
       <div className="card flexColumn alignCenter">
-        <img src={lion} alt="warning" className="image" />
+        {!warning && <img src={lion} alt="warning" className="image" />}
         <Spacer y={2.4} />
         <h4 className="colorGrey1 textCenter title">{prompt}</h4>
         <Spacer y={1.2} />
@@ -76,7 +82,9 @@ const ConfirmModal = ({ prompt, description, actionText, handleSubmit }) => {
           <Spacer x={2.4} />
           <button
             className="btn actionBtn flexRow alignCenter justifyCenter p1"
-            onClick={handleSubmit}
+            onClick={
+              warning ? () => window.location.replace("/register") : callback
+            }
           >
             {actionText}
           </button>

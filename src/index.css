@@ -182,6 +182,10 @@ p,
   letter-spacing: 0em;
 }
 
+.colorPrimaryLight {
+  color: var(--primary_light);
+}
+
 ::selection {
   background: var(--primary_main); /* WebKit/Blink Browsers */
   color: #ffffff;

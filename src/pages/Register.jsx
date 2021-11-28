@@ -16,6 +16,7 @@ import { Route, useHistory } from "react-router-dom";
 import FormGroup from "components/FormGroup";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 const Content = styled.div`
   position: relative;
@@ -125,6 +126,8 @@ const FormWrapper = styled.form`
 
 const ageGroups = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+const base_url = "https://bfcc-core.herokuapp.com/api/v1";
+
 const Register = () => {
   const router = useHistory();
   const [ageGroup, setAgeGroup] = useState("");
@@ -135,9 +138,21 @@ const Register = () => {
     router.push("/register/details");
   };
 
-  const setDetails = (details) => {
+  const setDetails = async (details) => {
     localStorage.setItem("details", JSON.stringify(details));
-    router.push("/register/test-time");
+
+    try {
+      let res = await axios.post(`${base_url}/register`, details);
+
+      if (res?.data?.status === "success") {
+        router.push("/test");
+      } else if (res?.data?.status === "failure") {
+        alert(res.data.message);
+      }
+    } catch (e) {
+      alert("An error occurred. Try again");
+      console.log(e);
+    }
   };
 
   const schema = Yup.object({
@@ -268,11 +283,13 @@ const Register = () => {
                 phone: "",
               }}
               validationSchema={schema}
-              onSubmit={(values) => {
-                setDetails(values);
+              onSubmit={async (values, { setSubmitting }) => {
+                setSubmitting(true);
+                await setDetails(values);
+                setSubmitting(false);
               }}
             >
-              {({ handleSubmit, values, isValid }) => (
+              {({ handleSubmit, values, isValid, isSubmitting }) => (
                 <FormWrapper onSubmit={handleSubmit}>
                   <FormGroup
                     fieldStyle="shortText"
@@ -295,12 +312,13 @@ const Register = () => {
                     type="number"
                     name="phone"
                     placeholder={`Parent's phone number`}
+                    fieldFormat="phone"
                   />
                   <div className="spanFull flexColumn alignCenter">
                     <Spacer y={4.8} />
                     <Button
                       type="submit"
-                      text="Next"
+                      text={isSubmitting ? "..." : "Submit"}
                       width="28rem"
                       className="textBold"
                       disabled={
@@ -308,7 +326,8 @@ const Register = () => {
                         !values.first_name ||
                         !values.last_name ||
                         !values.phone ||
-                        !values.email
+                        !values.email ||
+                        isSubmitting
                       }
                     />
                     <Spacer y={2.4} />

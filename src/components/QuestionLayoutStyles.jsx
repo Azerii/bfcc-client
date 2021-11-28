@@ -40,7 +40,11 @@ export const Wrapper = styled.div`
   }
 
   .questionImage {
-    height: 14.4rem;
+    height: 40rem;
+  }
+
+  .passage {
+    line-height: 48px;
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {

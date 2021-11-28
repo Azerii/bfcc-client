@@ -4,12 +4,11 @@ import bear from "assets/bear.svg";
 import left_arrow from "assets/left_arrow.svg";
 import right_arrow from "assets/right_arrow.svg";
 import bunny from "assets/bunny.svg";
-import pig_alone from "assets/pig_alone.svg";
-import play from "assets/play.svg";
-import sound_wave from "assets/sound_wave.svg";
-import audio_sample from "assets/sample.mp3";
-import image_sample from "assets/number_5.svg";
-import { useHistory } from "react-router-dom";
+// import pig_alone from "assets/pig_alone.svg";
+// import play from "assets/play.svg";
+// import sound_wave from "assets/sound_wave.svg";
+// import audio_sample from "assets/sample.mp3";
+// import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Spacer from "./Spacer";
 import Button from "./Button";
@@ -17,7 +16,7 @@ import localStorage from "redux-persist/es/storage";
 import ConfirmModal from "./ConfirmModal";
 import Loader from "./Loader";
 import {
-  AudioGroup,
+  // AudioGroup,
   Wrapper,
   Info,
   Options,
@@ -28,29 +27,30 @@ import axios from "axios";
 
 const tempSubjects = ["English Language", "Mathematics", "Science"];
 
-function isAudioType(s) {
-  return /\.(mp3|mp4)$/i.test(s);
-}
+// function isAudioType(s) {
+//   return /\.(mp3|mp4)$/i.test(s);
+// }
 
 function isImageType(s) {
   return /\.(jpe?g|png|gif|bmp|svg)$/i.test(s);
 }
 
-const base_url = "https://bfcc-backend.herokuapp.com/api/v1";
+const base_url = "https://bfcc-core.herokuapp.com/api/v1";
 
 const QuestionLayout = () => {
-  const router = useHistory();
+  // const router = useHistory();
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [currentSection, setCurrentSection] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [allSelected, setAllSelected] = useState(new Map());
   const [selectedOption, setSelectedOption] = useState("");
-  const [confirmPrompt] = useState("Ready to submit?");
-  const [confirmDescription] = useState(
+  const [confirmPrompt, setConfirmPrompt] = useState("Ready to submit?");
+  const [confirmDescription, setConfirmDescription] = useState(
     "Are you sure you want to submit this test? If you select submit, you will not be able to edit your answers."
   );
-  const [confirmActionText] = useState("Submit");
+  const [confirmActionText, setConfirmActionText] = useState("Submit");
+  const [warning, setWarning] = useState(false);
 
   const nextQuestion = () => {
     if (
@@ -74,11 +74,11 @@ const QuestionLayout = () => {
     }
   };
 
-  const playAudio = () => {
-    const audio = document.querySelector(".audioFile");
+  // const playAudio = () => {
+  //   const audio = document.querySelector(".audioFile");
 
-    audio.play();
-  };
+  //   audio.play();
+  // };
 
   const selectOption = async (question, option, optionKey) => {
     const point = option === question.options[optionKey - 1] ? 1 : 0;
@@ -219,7 +219,14 @@ const QuestionLayout = () => {
     }
   };
 
-  const showConfirmModal = () => {
+  const showConfirmModal = (type) => {
+    if (type === "warning") {
+      setConfirmActionText("Continue");
+      setConfirmDescription("You will lose all your progress if you proceed");
+      setConfirmPrompt("Are you sure you want to leave?");
+      setWarning(true);
+    }
+
     document.querySelector("#confirmModal").classList.add("show");
   };
 
@@ -264,12 +271,16 @@ const QuestionLayout = () => {
         const englishQ = await getQuestions(1, ageGroup);
         const mathQ1 = await getQuestions(2, ageGroup - 1);
         const mathQ2 = await getQuestions(2, ageGroup);
-        const scienceQ = await getQuestions(3, ageGroup);
+        const biologyQ = await getQuestions(3);
+        const chemistryQ = await getQuestions(4);
+        const physicsQ = await getQuestions(5);
 
         englishQ?.length && __questions.push(englishQ);
         mathQ1?.length && __questions.push(mathQ1);
         mathQ2?.length && __questions.push(mathQ2);
-        scienceQ?.length && __questions.push(scienceQ);
+        biologyQ?.length && __questions.push(biologyQ);
+        chemistryQ?.length && __questions.push(chemistryQ);
+        physicsQ?.length && __questions.push(physicsQ);
       }
     } catch (e) {
       setLoading(false);
@@ -333,7 +344,7 @@ const QuestionLayout = () => {
 
       <button
         className="home flexRow alignCenter justifyCenter"
-        onClick={() => router.push("/register")}
+        onClick={() => showConfirmModal("warning")}
       >
         <img src={homeIcon} alt="Home" className="icon" />
       </button>
@@ -362,11 +373,11 @@ const QuestionLayout = () => {
       </NavButton>
 
       <ConfirmModal
-        className="open"
         prompt={confirmPrompt}
         description={confirmDescription}
         actionText={confirmActionText}
-        handleSubmit={handleSubmit}
+        callback={handleSubmit}
+        warning={warning}
       />
 
       {questions[currentSection] &&
@@ -388,10 +399,10 @@ const QuestionLayout = () => {
       {questions[currentSection] && (
         <Content className="flexColumn alignCenter">
           <Spacer y={9.6} yMobile={7.2} />
-          <p className="questionNumber textCenter textUpperCase">
-            OUESTION {questionIndex + 1} 0F {questions[currentSection]?.length}
+          <p className="questionNumber textCenter">
+            QUESTION {questionIndex + 1} 0F {questions[currentSection]?.length}
           </p>
-          <Spacer y={2.4} />
+          <Spacer y={4.8} />
           {questions[currentSection][questionIndex]?.comprehension && (
             <h3 className="passage textCenter">
               {questions[currentSection][questionIndex]?.comprehension}
@@ -406,7 +417,7 @@ const QuestionLayout = () => {
             </h4>
           )}
           {!questions[currentSection][questionIndex]?.comprehension && (
-            <h3 className="title question textCenter textUpperCase">
+            <h3 className="title question textCenter">
               {questions[currentSection][questionIndex]?.question}
             </h3>
           )}
@@ -414,7 +425,7 @@ const QuestionLayout = () => {
           {questions[currentSection][questionIndex]?.media_path && (
             <Spacer y={2.4} />
           )}
-          {isAudioType(
+          {/* {isAudioType(
             questions[currentSection][questionIndex]?.media_path
           ) && (
             <AudioGroup className="flexRow alignCenter">
@@ -427,19 +438,20 @@ const QuestionLayout = () => {
               <Spacer x={0.6} />
               <img src={sound_wave} alt="Sound wave" className="wave" />
             </AudioGroup>
-          )}
+          )} */}
           {isImageType(
             questions[currentSection][questionIndex]?.media_path
           ) && (
             <img
-              src={image_sample}
+              src={`https://bfcc-core.herokuapp.com/api/v1/uploads/${questions[currentSection][questionIndex]?.media_path}`}
               alt="illustration"
               className="questionImage"
             />
           )}
-          {questions[currentSection][questionIndex]?.media_path && (
+          {/* {questions[currentSection][questionIndex]?.media_path && (
             <Spacer y={4.8} />
-          )}
+          )} */}
+          <Spacer y={4.8} />
           {questions[currentSection]?.map((question, index) => (
             <Options
               className={`${
