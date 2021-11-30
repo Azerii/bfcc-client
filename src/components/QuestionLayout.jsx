@@ -24,6 +24,7 @@ import {
   NavButton,
 } from "./QuestionLayoutStyles";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const tempSubjects = ["English Language", "Mathematics", "Science"];
 
@@ -38,7 +39,7 @@ function isImageType(s) {
 const base_url = "https://bfcc-core.herokuapp.com/api/v1";
 
 const QuestionLayout = () => {
-  // const router = useHistory();
+  const router = useHistory();
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [currentSection, setCurrentSection] = useState(0);
@@ -221,7 +222,7 @@ const QuestionLayout = () => {
 
   const showConfirmModal = (type) => {
     if (type === "warning") {
-      setConfirmActionText("Continue");
+      setConfirmActionText("Leave");
       setConfirmDescription("You will lose all your progress if you proceed");
       setConfirmPrompt("Are you sure you want to leave?");
       setWarning(true);
@@ -250,9 +251,24 @@ const QuestionLayout = () => {
   const getQuestionsByAgeGroup = async () => {
     setLoading(true);
     let ageGroup = parseInt(await localStorage.getItem("ageGroup"));
+    let details = JSON.parse(await localStorage.getItem("details"));
     let __questions = [];
 
     try {
+      if (!details) {
+        throw new Error("Please register first");
+      }
+
+      const formData = new FormData();
+
+      formData.append("email", details.email);
+
+      const contactRes = await axios.post(`${base_url}/getContact`, formData);
+
+      if (!contactRes || contactRes.data.status === "failure") {
+        throw new Error("Please register first");
+      }
+
       if (ageGroup === 1) {
         const englishQ = await getQuestions(1, 1);
         const mathQ = await getQuestions(2, 1);
@@ -282,14 +298,13 @@ const QuestionLayout = () => {
         chemistryQ?.length && __questions.push(chemistryQ);
         physicsQ?.length && __questions.push(physicsQ);
       }
-    } catch (e) {
+
+      setQuestions(__questions);
       setLoading(false);
-      console.log(e);
+    } catch (e) {
+      alert(e.message);
+      router.push("/register");
     }
-
-    setQuestions(__questions);
-
-    setLoading(false);
   };
 
   useEffect(() => {

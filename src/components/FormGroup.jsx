@@ -138,6 +138,7 @@ const FormGroup = ({
               inputComponent={__CustomPhoneInput}
               value={phoneVal}
               onChange={setPhoneVal}
+              international
             />
           ) : (
             <input
