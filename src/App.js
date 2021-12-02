@@ -1,3 +1,4 @@
+import ScrollToTop from "components/ScrollToTop";
 import Contact_Us from "pages/Contact_Us";
 import Landing from "pages/Landing";
 import PrivacyPolicy from "pages/PrivacyPolicy";
@@ -15,6 +16,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <ScrollToTop />
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route path="/contact-us" component={Contact_Us} />
