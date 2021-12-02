@@ -5,7 +5,6 @@ import Button from "./Button";
 import groupAnimals from "assets/landing/groupAnimals.svg";
 
 const Wrapper = Styled.div`
-  Height: 81.6rem;
   background-color: var(--accent_4_lighter);
   position: relative;
 
@@ -33,6 +32,7 @@ const Wrapper = Styled.div`
 
   .animals {
     width: 100%;
+    margin-bottom: -3px;
   }
 
   @media(max-width: 768px) {

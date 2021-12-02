@@ -56,21 +56,23 @@ const Footer = () => {
           Contact Us
         </Link>
         <Spacer x={4.8} yMobile={1.2} />
-        <Link to="/faq" className="link">
+        {/* <Link to="/faq" className="link">
           Help/FAQ
+        </Link> */}
+        <Link to="/policy-privacy" className="link">
+          Privacy policy
         </Link>
       </div>
       <Spacer y={14.4} yMobile={4.8} />
       <div className="bottom">
         <Spacer y={9.6} yMobile={4.8} />
-        <div className="footerCaption flexRow justifySpaceBetween">
+        <div className="footerCaption flexRow justifyCenter">
           <div className="footerCopyright">
             Copyright © 2021 BFCC, Inc. All rights reserved.
           </div>
-          <Spacer yMobile={1.2} />
-          <Link to="/policy-privacy" className="link">
+          {/* <Link to="/policy-privacy" className="link">
             Privacy policy
-          </Link>
+          </Link> */}
         </div>
       </div>
     </Wrapper>
