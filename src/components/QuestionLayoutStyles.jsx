@@ -257,7 +257,7 @@ export const Options = styled.div`
   }
 
   .item {
-    height: 6rem;
+    min-height: 6rem;
     width: 100%;
     border: 5px solid #ffffff;
     border-radius: 2rem;

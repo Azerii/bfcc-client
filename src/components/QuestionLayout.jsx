@@ -336,7 +336,11 @@ const QuestionLayout = () => {
           <h4 className="ageGroup textUpperCase">
             Level{" "}
             {questions[currentSection]
-              ? parseInt(questions[currentSection][questionIndex]?.ageGroupId)
+              ? typeof parseInt(
+                  questions[currentSection][questionIndex]?.ageGroupId
+                ) === "number"
+                ? parseInt(questions[currentSection][questionIndex]?.ageGroupId)
+                : localStorage.getItem("ageGroup")
               : null}
           </h4>
           <h4 className="subject">
