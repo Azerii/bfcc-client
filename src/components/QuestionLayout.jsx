@@ -26,7 +26,13 @@ import {
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const tempSubjects = ["English Language", "Mathematics", "Science"];
+const tempSubjects = [
+  "English Language",
+  "Mathematics",
+  "Biology",
+  "Chemistry",
+  "Physics",
+];
 
 // function isAudioType(s) {
 //   return /\.(mp3|mp4)$/i.test(s);
