@@ -40,7 +40,7 @@ export const Wrapper = styled.div`
   }
 
   .questionImage {
-    height: 40rem;
+    height: 30rem;
   }
 
   .passage {

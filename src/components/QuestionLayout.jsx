@@ -91,7 +91,7 @@ const QuestionLayout = () => {
 
   const selectOption = async (question, option, optionKey) => {
     const point = option === question.options[optionKey - 1] ? 1 : 0;
-    const section = `level ${question.classId} ${
+    const section = `level ${question.ageGroupId} ${
       tempSubjects[question.subjectId - 1]
     }`;
 
