@@ -351,7 +351,7 @@ const QuestionLayout = () => {
             {questions[currentSection]
               ? typeof parseInt(
                   questions[currentSection][questionIndex]?.ageGroupId
-                ) === "number"
+                ) !== NaN
                 ? parseInt(questions[currentSection][questionIndex]?.ageGroupId)
                 : localStorage.getItem("ageGroup")
               : null}
