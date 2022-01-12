@@ -256,6 +256,15 @@ const QuestionLayout = () => {
     }
   };
 
+  const validateUser = async (data) => {
+    try {
+      await axios.post(`${base_url}/getContact`, data);
+    } catch (e) {
+      console.log(e);
+      throw new Error("Please register first");
+    }
+  };
+
   const getQuestionsByAgeGroup = async () => {
     setLoading(true);
     let ageGroup = parseInt(await localStorage.getItem("ageGroup"));
@@ -271,11 +280,7 @@ const QuestionLayout = () => {
 
       formData.append("email", details.email);
 
-      const contactRes = await axios.post(`${base_url}/getContact`, formData);
-
-      if (!contactRes || contactRes.data.status === "failure") {
-        throw new Error("Please register first");
-      }
+      await validateUser(formData);
 
       if (ageGroup === 1) {
         const englishQ = await getQuestions(1, 1);
