@@ -65,6 +65,7 @@ const QuestionLayout = () => {
       questions[currentSection][questionIndex + 1]
     ) {
       setQuestionIndex(questionIndex + 1);
+      setSelectedOption("");
       document.querySelector("html").scrollTo(0, 0);
     } else {
       return false;
@@ -77,6 +78,7 @@ const QuestionLayout = () => {
       questions[currentSection][questionIndex - 1]
     ) {
       setQuestionIndex(questionIndex - 1);
+      setSelectedOption("");
       document.querySelector("html").scrollTo(0, 0);
     } else {
       return false;
