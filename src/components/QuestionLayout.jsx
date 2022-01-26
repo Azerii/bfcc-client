@@ -506,7 +506,7 @@ const QuestionLayout = () => {
                 question.options.map((option, index) => (
                   <button
                     key={index}
-                    className={`item t1 bold textUpperCase textLeft${
+                    className={`item t1 bold textLeft${
                       allSelected.get(`${currentSection}${questionIndex}`) ===
                         option || selectedOption === option
                         ? " selected"
