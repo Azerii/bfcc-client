@@ -58,6 +58,7 @@ const QuestionLayout = () => {
   );
   const [confirmActionText, setConfirmActionText] = useState("Submit");
   const [warning, setWarning] = useState(false);
+  const [ageGroup, setAgeGroup] = useState(null);
 
   const nextQuestion = () => {
     if (
@@ -93,7 +94,7 @@ const QuestionLayout = () => {
 
   const selectOption = async (question, option, optionKey) => {
     const point = option === question.options[optionKey - 1] ? 1 : 0;
-    const section = `level ${question.ageGroupId} ${
+    const section = `level ${question.ageGroupId ?? ageGroup} ${
       tempSubjects[question.subjectId - 1]
     }`;
 
@@ -322,7 +323,13 @@ const QuestionLayout = () => {
     }
   };
 
+  const setCurrentAgeGroup = async () => {
+    const ageGroup = await localStorage.getItem("ageGroup");
+    setAgeGroup(ageGroup);
+  };
+
   useEffect(() => {
+    setCurrentAgeGroup();
     getQuestionsByAgeGroup();
     window.onbeforeunload = (e) => {
       e.preventDefault();
@@ -349,11 +356,11 @@ const QuestionLayout = () => {
           <h4 className="ageGroup textUpperCase">
             Level{" "}
             {questions[currentSection]
-              ? typeof parseInt(
-                  questions[currentSection][questionIndex]?.ageGroupId
-                ) !== NaN
-                ? parseInt(questions[currentSection][questionIndex]?.ageGroupId)
-                : localStorage.getItem("ageGroup")
+              ? isNaN(
+                  parseInt(questions[currentSection][questionIndex]?.ageGroupId)
+                )
+                ? ageGroup
+                : parseInt(questions[currentSection][questionIndex]?.ageGroupId)
               : null}
           </h4>
           <h4 className="subject">

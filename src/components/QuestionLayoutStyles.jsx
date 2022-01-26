@@ -99,7 +99,7 @@ export const Info = styled.div`
     .text {
       top: 4rem;
       left: 1.6rem;
-      max-width: 14.4rem;
+      width: 14.4rem;
     }
   }
 
@@ -117,7 +117,7 @@ export const Info = styled.div`
     .text {
       top: 4rem;
       right: 2.8rem;
-      max-width: 18rem;
+      width: 18rem;
     }
   }
 

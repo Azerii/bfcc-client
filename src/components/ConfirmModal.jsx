@@ -82,9 +82,7 @@ const ConfirmModal = ({
           <Spacer x={2.4} />
           <button
             className="btn actionBtn flexRow alignCenter justifyCenter p1"
-            onClick={
-              warning ? () => window.location.replace("/register") : callback
-            }
+            onClick={warning ? () => window.location.replace("/") : callback}
           >
             {actionText}
           </button>

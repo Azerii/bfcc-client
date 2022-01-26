@@ -17,6 +17,8 @@ import FormGroup from "components/FormGroup";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+// import { useEffect } from "react";
+// import Loader from "components/Loader";
 
 const Content = styled.div`
   position: relative;
@@ -132,6 +134,8 @@ const Register = () => {
   const router = useHistory();
   const [ageGroup, setAgeGroup] = useState("");
   const [testTime, setTestTime] = useState("");
+  // const [valid, setValid] = useState(false);
+  // const [loading, setLoading] = useState(true);
 
   const selectAgeGroup = () => {
     localStorage.setItem("ageGroup", ageGroup);
@@ -163,6 +167,46 @@ const Register = () => {
       .required("Field required"),
     phone: Yup.string().required("Field required"),
   });
+
+  // const validateUser = async () => {
+  //   let details = JSON.parse(localStorage.getItem("details"));
+
+  //   if (!details) {
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   try {
+  //     let res = await axios.post(`${base_url}/getContact`, {
+  //       email: details.email,
+  //     });
+
+  //     if (res?.data?.status === "success") {
+  //       setValid(true);
+  //     }
+  //     setLoading(false);
+  //   } catch (e) {
+  //     setLoading(false);
+  //     console.log(e);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   validateUser();
+  // }, []);
+
+  // if (loading) {
+  //   return (
+  //     <Loader
+  //       title="Hang on"
+  //       description={`This might take a couple \nof seconds.`}
+  //     />
+  //   );
+  // }
+
+  // if (valid) {
+  //   return <Redirect to="/test/session" />;
+  // }
 
   return (
     <>
