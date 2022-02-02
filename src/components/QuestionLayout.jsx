@@ -4,11 +4,6 @@ import bear from "assets/bear.svg";
 import left_arrow from "assets/left_arrow.svg";
 import right_arrow from "assets/right_arrow.svg";
 import bunny from "assets/bunny.svg";
-// import pig_alone from "assets/pig_alone.svg";
-// import play from "assets/play.svg";
-// import sound_wave from "assets/sound_wave.svg";
-// import audio_sample from "assets/sample.mp3";
-// import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Spacer from "./Spacer";
 import Button from "./Button";
@@ -16,7 +11,6 @@ import localStorage from "redux-persist/es/storage";
 import ConfirmModal from "./ConfirmModal";
 import Loader from "./Loader";
 import {
-  // AudioGroup,
   Wrapper,
   Info,
   Options,
@@ -25,6 +19,7 @@ import {
 } from "./QuestionLayoutStyles";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import Timer from "./Timer";
 
 const tempSubjects = [
   "English Language",
@@ -33,10 +28,6 @@ const tempSubjects = [
   "Chemistry",
   "Physics",
 ];
-
-// function isAudioType(s) {
-//   return /\.(mp3|mp4)$/i.test(s);
-// }
 
 function isImageType(s) {
   return /\.(jpe?g|png|gif|bmp|svg)$/i.test(s);
@@ -59,6 +50,7 @@ const QuestionLayout = () => {
   const [confirmActionText, setConfirmActionText] = useState("Submit");
   const [warning, setWarning] = useState(false);
   const [ageGroup, setAgeGroup] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(10);
 
   const nextQuestion = () => {
     if (
@@ -86,12 +78,6 @@ const QuestionLayout = () => {
     }
   };
 
-  // const playAudio = () => {
-  //   const audio = document.querySelector(".audioFile");
-
-  //   audio.play();
-  // };
-
   const selectOption = async (question, option, optionKey) => {
     const point = option === question.options[optionKey - 1] ? 1 : 0;
     const section = `level ${question.ageGroupId ?? ageGroup} ${
@@ -99,20 +85,10 @@ const QuestionLayout = () => {
     }`;
 
     let points = {};
-    let sectionKeys = [];
-    let sectionKeyNames = await localStorage.getItem("sectionKeys");
     let sectionName = await localStorage.getItem(section);
-
-    if (sectionKeyNames) {
-      sectionKeys = [...JSON.parse(sectionKeyNames)];
-    }
 
     if (sectionName) {
       points = { ...JSON.parse(sectionName) };
-    } else {
-      sectionKeys.push(section);
-
-      localStorage.setItem("sectionKeys", JSON.stringify(sectionKeys));
     }
 
     points[questionIndex + 1] = point;
@@ -125,30 +101,28 @@ const QuestionLayout = () => {
   };
 
   const gradeSection = async () => {
-    const tempKeys = await localStorage.getItem("sectionKeys");
+    const question = questions[currentSection][questionIndex];
+    const section = `level ${question.ageGroupId ?? ageGroup} ${
+      tempSubjects[question.subjectId - 1]
+    }`;
     let graded = false;
     let score = 0;
 
-    if (!tempKeys) {
-      alert("You have not attempted any question");
-      return;
-    }
-
     try {
-      const sectionKeys = JSON.parse(await localStorage.getItem("sectionKeys"));
-      const sectionName = sectionKeys[currentSection];
-      const sectionPoints = JSON.parse(await localStorage.getItem(sectionName));
+      const sectionPoints = (await localStorage.getItem(section))
+        ? JSON.parse(await localStorage.getItem(section))
+        : {};
       const numberOfQuestions = questions[currentSection].length;
-
-      if (allSelected.size < numberOfQuestions) {
-        throw new Error("You must attempt all questions");
-      }
 
       let acc = 0;
 
-      Object.keys(sectionPoints).forEach((key) => {
-        acc += sectionPoints[key];
-      });
+      console.log(sectionPoints);
+
+      if (sectionPoints) {
+        Object.keys(sectionPoints)?.forEach((key) => {
+          acc += sectionPoints[key];
+        });
+      }
 
       score = parseInt((acc / numberOfQuestions) * 100);
 
@@ -158,7 +132,7 @@ const QuestionLayout = () => {
         tempScores = { ...JSON.parse(await localStorage.getItem("scores")) };
       }
 
-      tempScores[sectionName] = score;
+      tempScores[section] = score;
       localStorage.setItem("scores", JSON.stringify(tempScores));
 
       setAllSelected(new Map());
@@ -176,6 +150,7 @@ const QuestionLayout = () => {
     if (result?.graded) {
       setQuestionIndex(0);
       setCurrentSection(currentSection + 1);
+      setTimeLeft(10);
     }
   };
 
@@ -328,6 +303,15 @@ const QuestionLayout = () => {
     setAgeGroup(ageGroup);
   };
 
+  const handleTimeUp = () => {
+    if (questions[currentSection + 1]?.length) {
+      alert("Oops.. Your time is up for this section");
+      nextSection();
+    } else {
+      handleSubmit();
+    }
+  };
+
   useEffect(() => {
     setCurrentAgeGroup();
     getQuestionsByAgeGroup();
@@ -350,6 +334,11 @@ const QuestionLayout = () => {
 
   return (
     <Wrapper>
+      <Timer
+        time={timeLeft}
+        setTime={setTimeLeft}
+        handleTimeUp={handleTimeUp}
+      />
       <Info className="level">
         <img src={elephant} alt="Cartoon elephant" className="image" />
         <div className="text">
@@ -439,15 +428,15 @@ const QuestionLayout = () => {
 
       {questions[currentSection] && (
         <Content className="flexColumn alignCenter">
-          <Spacer y={9.6} yMobile={7.2} />
+          <Spacer y={10.8} />
           <p className="questionNumber textCenter">
             QUESTION {questionIndex + 1} 0F {questions[currentSection]?.length}
           </p>
           <Spacer y={4.8} />
           {questions[currentSection][questionIndex]?.comprehension && (
-            <h3 className="passage textCenter">
+            <h4 className="passage textCenter">
               {questions[currentSection][questionIndex]?.comprehension}
-            </h3>
+            </h4>
           )}
           {questions[currentSection][questionIndex]?.comprehension && (
             <Spacer y={4.8} />

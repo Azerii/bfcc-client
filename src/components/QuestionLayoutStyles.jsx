@@ -150,7 +150,7 @@ export const Info = styled.div`
       position: absolute;
       height: auto;
       width: max-content;
-      top: 2.4rem;
+      top: 8.4rem;
       left: 50%;
       transform: translateX(-50%);
 
@@ -159,6 +159,7 @@ export const Info = styled.div`
         top: unset;
         left: unset;
         max-width: unset;
+        width: auto;
       }
   
         .image {
