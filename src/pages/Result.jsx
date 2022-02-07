@@ -35,6 +35,19 @@ const Wrapper = styled.div`
     color: var(--accent_3_main);
   }
 
+  .breakdown {
+    width: 28rem;
+    color: #ffffff;
+
+    .item {
+      margin-bottom: 0.6rem;
+    }
+
+    .scoreItem {
+      width: 5ch;
+    }
+  }
+
   .doneBtn {
     position: relative;
     background-color: var(--accent_2_main);
@@ -56,14 +69,19 @@ const Wrapper = styled.div`
 `;
 
 const Result = () => {
-  const [score, setScore] = useState(0);
+  const [overall, setOverall] = useState(0);
+  const [scores, setScores] = useState([]);
 
   useEffect(() => {
     const ovr = localStorage.getItem("ovr");
+    const details = localStorage.getItem("details");
 
-    setScore(ovr);
+    if (details) {
+      let temp = JSON.parse(details);
+      setScores(temp.scores);
+    }
 
-    // localStorage.clear();
+    setOverall(ovr);
     // eslint-disable-next-line
   }, []);
 
@@ -81,11 +99,28 @@ const Result = () => {
         Congratulations! <br />
         You’ve successfully completed the assessment.
       </h4>
-      <Spacer y={9.6} />
-      <h1 className="score">{score}%</h1>
+      <Spacer y={6} />
+      <h1 className="score">{overall || 0}%</h1>
       <Spacer y={0.3} />
       <span className="description t1 textCenter">Your overall score</span>
-      <Spacer y={9.6} />
+      <Spacer y={1.6} />
+      <div className="breakdown">
+        <div className="flexRow justifySpaceBetween">
+          <span className="p1 textBold">Subject</span>
+          <span className="p1 textBold">Score</span>
+        </div>
+        <Spacer y={1.2} />
+
+        {scores?.map((item, index) => (
+          <div key={index} className="flexRow justifySpaceBetween item">
+            <span className="p2 textCapitalize">
+              {item.subject} {item.ageGroup}
+            </span>
+            <span className="p2 scoreItem">{item.score}%</span>
+          </div>
+        ))}
+      </div>
+      <Spacer y={4.8} />
       <button
         type="button"
         className="doneBtn p1"

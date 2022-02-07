@@ -50,7 +50,7 @@ const QuestionLayout = () => {
   const [confirmActionText, setConfirmActionText] = useState("Submit");
   const [warning, setWarning] = useState(false);
   const [ageGroup, setAgeGroup] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(900);
 
   const nextQuestion = () => {
     if (
@@ -150,7 +150,7 @@ const QuestionLayout = () => {
     if (result?.graded) {
       setQuestionIndex(0);
       setCurrentSection(currentSection + 1);
-      setTimeLeft(10);
+      setTimeLeft(900);
     }
   };
 
@@ -175,7 +175,8 @@ const QuestionLayout = () => {
 
         let score = scores[key];
         let subject = key.split(" ").slice(2).join(" ");
-        let scoreData = { subject, score };
+        let ageGroup = key.split(" ")[1];
+        let scoreData = { subject, score, ageGroup };
 
         details.scores.push(scoreData);
       });
@@ -183,6 +184,8 @@ const QuestionLayout = () => {
       ovr = parseInt(acc / numberOfSections);
 
       details.overall_score = ovr;
+
+      localStorage.setItem("details", JSON.stringify(details));
 
       try {
         setLoading(true);

@@ -24,7 +24,7 @@ const Test = () => {
       setAgeGroup(parseInt(tempAgeGroup));
     }
 
-    if (tempDetails) {
+    if (typeof tempDetails === "string") {
       setDetails(JSON.parse(tempDetails));
     }
     // eslint-disable-next-line
@@ -56,7 +56,7 @@ const Test = () => {
             <p className="textCenter">
               An email has been sent to{" "}
               <b className="textUnderline colorPrimaryLight">
-                {details.email ?? "your inbox"}
+                {details?.email ?? "your inbox"}
               </b>{" "}
               with a link to the test. <br />
               If you don't see this mail in your inbox, please check your spam.

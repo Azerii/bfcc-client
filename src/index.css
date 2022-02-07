@@ -105,6 +105,7 @@ button {
   border: none;
   cursor: pointer;
   background-color: transparent;
+  font-family: var(--font_regular);
 }
 
 button:focus,
@@ -117,6 +118,7 @@ select {
 }
 
 textarea {
+  font-family: var(--font_regular);
   resize: none;
 }
 
