@@ -114,7 +114,7 @@ const Result = () => {
         {scores?.map((item, index) => (
           <div key={index} className="flexRow justifySpaceBetween item">
             <span className="p2 textCapitalize">
-              {item.subject} {item.ageGroup}
+              {item.subject} Level {item.ageGroup}
             </span>
             <span className="p2 scoreItem">{item.score}%</span>
           </div>
